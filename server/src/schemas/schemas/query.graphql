@@ -1,0 +1,72 @@
+# Base user type
+type User {
+  id: ID!
+  email: String!
+  #password: String!
+  username: String!
+  firstname: String
+  lastname: String
+  avatar: String
+  createdAt: String!
+  updatedAt: String!
+}
+
+# Type Comment
+type Comment {
+	id: ID!
+	post: Post!
+	user: User
+	body: String!
+	createdAt: String!
+	updatedAt: String!
+}
+
+# A post can be Answer or Question
+# PostType is an Int
+# Question : 0
+# Answer : 1
+
+# Post Type
+type Post {
+	id: ID!
+	type: Int!
+	user: User
+	body: String!
+	vote: Int!
+	comments: [Comment]
+	title: String
+	tags: [String]!
+	answers: [Post]
+	createdAt: String!
+	updatedAt: String!
+}
+
+# Query
+type Query {
+	getMyProfile: GetProfileResponse!
+	getProfile(username: String): GetProfileResponse!
+	getPosts(query: String, first: Int!, offset: Int!, user: ID): GetPostsResponse!
+	getQuestions(query: String, first: Int!, offset: Int!, user: ID): GetPostsResponse!
+	getAnswers(query: String, first: Int!, offset: Int!, user: ID): GetPostsResponse!
+	getPostDetailsByID(pid: ID!): GetPostResponse!
+}
+
+type GetPostResponse {
+	ok: Boolean!
+	error: String
+	post: Post
+}
+
+# Response for all requests is same
+type GetPostsResponse {
+	ok: Boolean!
+	error: String
+	posts: [Post]
+}
+
+# Get profile
+type GetProfileResponse {
+  ok: Boolean!
+  error: String
+  user: User
+}

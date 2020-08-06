@@ -1,0 +1,65 @@
+type Mutation {
+  signUp(
+    email: String!
+    password: String!
+    userName: String!
+  ): SignUpResponse!
+  signIn(email: String!, password: String!): SignInResponse!
+  changePassword(password: String!): ChangePasswordResponse!
+  changeProfile(userName: String, firstName: String, lastName: String, avatar: String): ChangeProfileResponse!
+  createPost(type: PostType, title: String, body: String!, tags: [String]): CreatePostResponse!
+  updatePost(pid: ID!, title: String, body: String!, tags: [String]): UpdatePostResponse!
+  createComment(pid: ID!, body: String!): CreateCommentResponse!
+  updateComment(cid: ID!, body: String!): UpdateCommentResponse!
+}
+
+
+type UpdateCommentResponse {
+  ok: Boolean!
+  error: String
+  post: Comment
+}
+
+
+type CreateCommentResponse {
+  ok: Boolean!
+  error: String
+  post: Comment
+}
+
+
+type UpdatePostResponse {
+  ok: Boolean!
+  error: String
+  post: Post
+}
+
+type CreatePostResponse {
+  ok: Boolean!
+  error: String
+  post: Post
+}
+
+type SignUpResponse {
+  ok: Boolean!
+  error: String
+  user: User
+}
+
+type SignInResponse {
+  ok: Boolean!
+  error: String
+  token: String
+}
+
+type ChangePasswordResponse {
+  ok: Boolean!
+  error: String
+  user: User
+}
+
+type ChangeProfileResponse {
+  ok: Boolean!
+  error: String
+  user: User
+}

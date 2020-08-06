@@ -1,0 +1,1 @@
+cat $GOPATH/src/schemas/schemas/*.graphql > $GOPATH/src/schemas/schema.graphql
