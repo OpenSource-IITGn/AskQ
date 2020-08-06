@@ -7,16 +7,10 @@ import (
 )
 
 
-func (user *User) HashPassword() bool {
+func (user *User) HashPassword() {
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 
-	if err != nil{
-		return false
-	}
-
 	user.Password = string(hash)
-
-	return true
 }
 
 
