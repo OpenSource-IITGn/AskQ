@@ -44,5 +44,6 @@ type Post struct {
 	Title		string `gorm:"type:varchar(1024)"`
 	Answers		[]Post
 	Comments	[]Comment
+	PostType	uint
 	Tags		string `gorm:"type:varchar(1024)"`
 }

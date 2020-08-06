@@ -24,14 +24,6 @@ func (r *UserResponse) Email() string {
 	return r.u.Email
 }
 
-// Password for UserResponse
-// Original code commented for security purpose.
-// Crafter query attack
-// getPostDetailsByID(pid) : GetPost{... Post{User{password}}}
-// Will reveal password
-// func (r *UserResponse) Password() string {
-// 	return r.u.Password
-// }
 
 // FirstName for UserResponse
 func (r *UserResponse) UserName() string {
