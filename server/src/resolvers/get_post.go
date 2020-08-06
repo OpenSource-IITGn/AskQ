@@ -1,15 +1,13 @@
 package resolvers
 
-import "resolvers"
-
-func (r *Resolvers) GetPosts(args getPostsArgs)
+//func (r *Resolvers) GetPosts(args getPostsArgs)
 
 
-type getPostsArgs struct {
+type GetPostsArgs struct {
 	Query		string
 	First		int
 	Offset		int
-	User		unit
+	User		uint
 }
 
 type GetPostsResponse struct {

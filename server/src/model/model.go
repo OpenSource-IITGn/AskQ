@@ -29,21 +29,22 @@ type User struct {
 // Comment Type
 type Comment struct {
 	gorm.Model
-	User 		User
+	User 		User `gorm:"foreignkey:UserID"`
+	UserID		uint
 	Body		string `gorm:"type:text";not null`
-	Post		Post
+	PostID		uint `gorm:"index;not null"`
 }
 
 // Post Type
-// TODO : Add enum type
 type Post struct {
 	gorm.Model
-	User 		User
+	UserID		uint
+	User 		User `gorm:"foreignkey:UserID"`
 	Body 		string `gorm:"type:text;not null"`
-	Vote		int
+	Vote		int32
 	Title		string `gorm:"type:varchar(1024)"`
 	Answers		[]Post
-	Comments	[]Comment
-	PostType	uint
+	Comments	[]Comment `gorm:"foreignkey:PostID"`
+	PostType	int32
 	Tags		string `gorm:"type:varchar(1024)"`
 }

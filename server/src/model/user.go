@@ -8,7 +8,7 @@ import (
 
 
 func (user *User) HashPassword() {
-	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	hash, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 
 	user.Password = string(hash)
 }

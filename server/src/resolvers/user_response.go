@@ -5,7 +5,7 @@ import (
 
 	graphql "github.com/graph-gophers/graphql-go"
 
-	"github.com/mattdamon108/go-graphql-api-boilerplate/model"
+	"model"
 )
 
 // UserResponse is the user response type
@@ -32,18 +32,18 @@ func (r *UserResponse) UserName() string {
 
 
 // FirstName for UserResponse
-func (r *UserResponse) FirstName() string {
-	return r.u.FirstName
+func (r *UserResponse) FirstName() *string {
+	return &r.u.FirstName
 }
 
 // LastName for UserResponse
-func (r *UserResponse) LastName() string {
-	return r.u.LastName
+func (r *UserResponse) LastName() *string {
+	return &r.u.LastName
 }
 
 // Avatar for UserResponse
-func (r *UserResponse) Avatar() string {
-	return r.u.Avatar
+func (r *UserResponse) Avatar() *string {
+	return &r.u.Avatar
 }
 
 // CreatedAt for UserResponse

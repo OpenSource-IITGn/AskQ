@@ -36,5 +36,5 @@ func (r *Resolvers) SignUp(args signUpMutationArgs) (*QueryResponse, error) {
 type signUpMutationArgs struct {
 	Email     string
 	Password  string
-	UirstName string
+	UserName string
 }

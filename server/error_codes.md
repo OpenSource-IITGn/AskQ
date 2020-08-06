@@ -6,7 +6,8 @@
 3. User Addition Error : 102
 4. User Addition Success: 100
 
-## Change Password
+## User Codes
 1. Not Authorized : 202
 2. Not Existing : 201
-3. Change Successful : 200
+3. Action Successful : 200
+4. Username already in-use : 203

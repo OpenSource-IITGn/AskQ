@@ -1,3 +1,31 @@
+type Mutation {
+  signUp(
+    email: String!
+    password: String!
+    userName: String!
+  ): QueryResponse!
+  signIn(email: String!, password: String!): SignInResponse!
+  changePassword(password: String!): QueryResponse!
+  changeProfile(userName: String, firstName: String, lastName: String, avatar: String): QueryResponse!
+  createPost(posttype: Int!, title: String, body: String!, tags: [String]): QueryResponse!
+  updatePost(pid: ID!, title: String, body: String!, tags: [String]): QueryResponse!
+  deletePost(pid: ID!): QueryResponse!
+  createComment(pid: ID!, body: String!): QueryResponse
+  updateComment(cid: ID!, body: String!): QueryResponse!
+  deleteComment(cid: ID!): QueryResponse!
+}
+
+
+type QueryResponse {
+  ok: Int!
+  error: String
+}
+
+type SignInResponse {
+  ok: Boolean!
+  error: String
+  token: String
+}
 # Base user type
 type User {
   id: ID!
