@@ -1,57 +1,53 @@
 package resolvers
 
 import (
-	"strconv"
-
-	graphql "github.com/graph-gophers/graphql-go"
-
+	"fmt"
 	"model"
 )
 
 // UserResponse is the user response type
 type UserResponse struct {
-	u *model.User
+	U *model.User
 }
 
 // ID for UserResponse
-func (r *UserResponse) ID() graphql.ID {
-	id := strconv.Itoa(int(r.u.ID))
-	return graphql.ID(id)
+func (r *UserResponse) ID() string {
+	return fmt.Sprint(r.U.ID)
 }
 
 // Email for UserResponse
 func (r *UserResponse) Email() string {
-	return r.u.Email
+	return r.U.Email
 }
 
 
 // FirstName for UserResponse
 func (r *UserResponse) UserName() string {
-	return r.u.UserName
+	return r.U.UserName
 }
 
 
 // FirstName for UserResponse
 func (r *UserResponse) FirstName() *string {
-	return &r.u.FirstName
+	return &r.U.FirstName
 }
 
 // LastName for UserResponse
 func (r *UserResponse) LastName() *string {
-	return &r.u.LastName
+	return &r.U.LastName
 }
 
 // Avatar for UserResponse
 func (r *UserResponse) Avatar() *string {
-	return &r.u.Avatar
+	return &r.U.Avatar
 }
 
 // CreatedAt for UserResponse
 func (r *UserResponse) CreatedAt() string {
-	return r.u.CreatedAt.String()
+	return r.U.CreatedAt.String()
 }
 
 // UpdatedAt for UserResponse
 func (r *UserResponse) UpdatedAt() string {
-	return r.u.UpdatedAt.String()
+	return r.U.UpdatedAt.String()
 }

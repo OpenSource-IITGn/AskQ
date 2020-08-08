@@ -1,8 +1,7 @@
 package resolvers
 
 import (
-	"strconv"
-
+	"fmt"
 	"model"
 	"jwtutil"
 )
@@ -11,9 +10,7 @@ import (
 func (r *Resolvers) SignIn(args signInMutationArgs) (*SignInResponse, error) {
 	user := model.User{}
 
-	r.DB.Where("email = ?", args.Email).First(&user)
-
-	if user.ID == 0 {
+	if err:= r.DB.Where("email = ?", args.Email).First(&user).Error; err!=nil {
 		msg := "Not Sign up yet"
 		return &SignInResponse{Status: false, Msg: &msg, Token: nil}, nil
 	}
@@ -23,7 +20,7 @@ func (r *Resolvers) SignIn(args signInMutationArgs) (*SignInResponse, error) {
 		return &SignInResponse{Status: false, Msg: &msg, Token: nil}, nil
 	}
 
-	userIDString := strconv.Itoa(int(user.ID))
+	userIDString := fmt.Sprint(user.ID)
 	tokenString, err := jwtutil.SignJWT(&userIDString)
 	if err != nil {
 		msg := "Error in generating JWT"

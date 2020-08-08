@@ -1,6 +1,6 @@
 # Base user type
 type User {
-  id: ID!
+  id: String!
   email: String!
   username: String!
   firstname: String
@@ -13,9 +13,9 @@ type User {
 # Type Comment
 # Note: Removed Post as Comment cannot be used to find post
 type Comment {
-	id: ID!
+	id: String!
 	user: User
-	body: String!
+	body: String
 	createdAt: String!
 	updatedAt: String!
 }
@@ -27,15 +27,15 @@ type Comment {
 
 # Post Type
 type Post {
-	id: ID!
+	id: String!
 	posttype: Int!
 	user: User
-	body: String!
+	body: String
 	vote: Int!
-	comments: [Comment]
+	comments: [Comment]!
 	title: String
 	tags: [String]!
-	answers: [Post]
+	answers: [Post]!
 	createdAt: String!
 	updatedAt: String!
 }
@@ -44,14 +44,14 @@ type Post {
 type Query {
 	getMyProfile: GetProfileResponse!
 	getProfile(username: String!): GetProfileResponse!
-	getPosts(query: String, first: Int!, offset: Int!, user: ID): GetPostsResponse!
-	getQuestions(query: String, first: Int!, offset: Int!, user: ID): GetPostsResponse!
-	getAnswers(query: String, first: Int!, offset: Int!, user: ID): GetPostsResponse!
-	getPostDetailsByID(pid: ID!): GetPostResponse!
+	#getPosts(query: String, first: Int!, offset: Int!, user: String): GetPostsResponse!
+	#getQuestions(query: String, first: Int!, offset: Int!, user: String): GetPostsResponse!
+	#getAnswers(query: String, first: Int!, offset: Int!, user: String): GetPostsResponse!
+	getPostDetailsByID(id: String!): GetPostResponse!
 }
 
 type GetPostResponse {
-	ok: Boolean!
+	ok: Int!
 	error: String
 	post: Post
 }

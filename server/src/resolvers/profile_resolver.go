@@ -20,7 +20,7 @@ func (r *Resolvers) GetMyProfile(ctx context.Context) (*GetProfileResponse, erro
 		msg := "Not found"
 		return &GetProfileResponse{Status: 201, Msg: &msg, User: nil}, nil
 	}
-	return &GetProfileResponse{Status: 200, Msg: nil, User: &UserResponse{u: &user}}, nil
+	return &GetProfileResponse{Status: 200, Msg: nil, User: &UserResponse{U: &user}}, nil
 }
 
 // GetUserProfile
@@ -34,7 +34,7 @@ func (r *Resolvers) GetProfile(args GetProfileArgs) (*GetProfileResponse, error)
 		msg := "Not found"
 		return &GetProfileResponse{Status: 201, Msg: &msg, User: nil}, nil
 	}
-	return &GetProfileResponse{Status: 200, Msg: nil, User: &UserResponse{u: &user}}, nil
+	return &GetProfileResponse{Status: 200, Msg: nil, User: &UserResponse{U: &user}}, nil
 }
 
 
@@ -44,66 +44,64 @@ type ChangePasswordArgs struct {
 }
 
 func (r *Resolvers) ChangePassword(ctx context.Context, args ChangePasswordArgs) (*QueryResponse, error) {
-	userID := ctx.Value(handler.ContextKey("userID"))
+	
+	profile, _ := r.GetMyProfile(ctx)
 
-	if userID == nil {
-		msg := "Not Authorized"
-		return &QueryResponse{Status: 202, Msg: &msg}, nil
-	}
-	user := model.User{}
-
-	if err := r.DB.First(&user, userID).Error; err != nil {
-		msg := "Not existing user"
-		return &QueryResponse{Status: 201, Msg: &msg}, nil
+	if profile.Status!=200 {
+		return &QueryResponse{Status: profile.Status, Msg: profile.Msg}, nil
 	}
 
-	user.Password = args.Password
-	user.HashPassword()
+	profile.User.U.Password = args.Password
+	profile.User.U.HashPassword()
 
-	r.DB.Save(&user)
+	if err := r.DB.Save(profile.User.U).Error; err != nil {
+		msg:= "Error while updating"
+		return &QueryResponse{Status: 204, Msg: &msg}, nil
+	}
+	
 	return &QueryResponse{Status: 200, Msg: nil}, nil
 }
 
 // Change Profile
 type ChangeProfileArgs struct {
-	UserName 	string
-	FirstName	string
-	LastName	string
-	Avatar		string
+	UserName 	*string
+	FirstName	*string
+	LastName	*string
+	Avatar		*string
 }
 
 func (r *Resolvers) ChangeProfile(ctx context.Context, args ChangeProfileArgs) (*QueryResponse, error) {
-	userID := ctx.Value(handler.ContextKey("userID"))
+	profile, _ := r.GetMyProfile(ctx)
 
-	if userID == nil {
-		msg := "Not Authorized"
-		return &QueryResponse{Status: 202, Msg: &msg}, nil
-	}
-	user := model.User{}
-
-	if err := r.DB.First(&user, userID).Error; err != nil {
-		msg := "Not existing user"
-		return &QueryResponse{Status: 201, Msg: &msg}, nil
+	if profile.Status!=200 {
+		return &QueryResponse{Status: profile.Status, Msg: profile.Msg}, nil
 	}
 
-	if args.FirstName!="" {
-		user.FirstName = args.FirstName
+	update := make(map[string]string)
+
+	if args.FirstName!=nil {
+		update["FirstName"] = *args.FirstName
 	}
-	if args.LastName!="" {
-		user.LastName = args.LastName
+	if args.LastName!=nil {
+		update["LastName"] = *args.LastName
 	}
-	if args.Avatar!="" {
-		user.Avatar = args.Avatar
+	if args.Avatar!=nil {
+		update["Avatar"] = *args.Avatar
 	}
-	if args.UserName==user.UserName {
-		r.DB.Save(&user)
+	if args.UserName==nil {
+		r.DB.Model(profile.User.U).Update(update)
 		return &QueryResponse{Status: 200, Msg: nil}, nil		
-	} else if err := r.DB.Where("username = ?", args.UserName).First(&user).Error; err == nil {
+	} else if !r.DB.Where("username = ?", *args.UserName).First(&model.User{}).RecordNotFound()  {
 		msg:= "Username already in use"
 		return &QueryResponse{Status: 203, Msg: &msg}, nil
+	} else {
+		update["UserName"] = *args.UserName
 	}
 
+	if err := r.DB.Model(profile.User.U).Update(update).Error; err != nil {
+		msg:= "Error while updating"
+		return &QueryResponse{Status: 204, Msg: &msg}, nil
+	}
 
-	r.DB.Save(&user)
 	return &QueryResponse{Status: 200, Msg: nil}, nil
 }

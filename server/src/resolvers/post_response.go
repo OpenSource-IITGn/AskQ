@@ -1,11 +1,8 @@
 package resolvers
 
 import (
-	"strconv"
-
-	graphql "github.com/graph-gophers/graphql-go"
-
 	"model"
+	"fmt"
 )
 
 // PostResponse is the post response type
@@ -15,9 +12,8 @@ type PostResponse struct {
 }
 
 // ID for PostResponse
-func (r *PostResponse) ID() graphql.ID {
-	id := strconv.Itoa(int(r.p.ID))
-	return graphql.ID(id)
+func (r *PostResponse) ID() string {
+	return fmt.Sprint(r.p.ID)
 }
 
 // CreatedAt for PostResponse
@@ -51,8 +47,14 @@ func (r *PostResponse) Body() *string {
 }
 
 // Tags for PostResponse
-func (r *PostResponse) Tags() *string {
-	return &r.p.Tags
+func (r *PostResponse) Tags() []*string {
+	var tags []*string
+	tags = append(tags, &r.p.Tag1)
+	tags = append(tags, &r.p.Tag2)
+	tags = append(tags, &r.p.Tag3)
+	tags = append(tags, &r.p.Tag4)
+	tags = append(tags, &r.p.Tag5)
+	return tags
 }
 
 // User for PostResponse
@@ -61,7 +63,7 @@ func (r *PostResponse) User() *UserResponse {
 	if err := r.res.DB.Model(r.p).Related(&user, "User").Error; err != nil {
 		return nil
 	}
-	return &UserResponse{u: &user}
+	return &UserResponse{U: &user}
 }
 
 // Answers for PostResponse
@@ -70,14 +72,14 @@ func (r *PostResponse) Answers() []*PostResponse {
 		return nil
 	}
 
-	var posts []model.Post
+	var posts []*model.Post
 	if err:= r.res.DB.Model(r.p).Related(&posts, "Answers").Error; err != nil {
 		return nil
 	}
 
 	var ans []*PostResponse
 	for _, v := range posts {
-		ans = append(ans, &PostResponse{p: &v, res: r.res})
+		ans = append(ans, &PostResponse{p: v, res: r.res})
 	}
 
 	return ans
@@ -85,14 +87,14 @@ func (r *PostResponse) Answers() []*PostResponse {
 
 // Comments for PostResponse
 func (r *PostResponse) Comments() []*CommentResponse {
-	var coms []model.Comment
+	var coms []*model.Comment
 	if err:= r.res.DB.Model(r.p).Related(&coms, "Comments").Error; err != nil {
 		return nil
 	}
 
 	var comments []*CommentResponse
 	for _, v := range coms {
-		comments = append(comments, &CommentResponse{p: &v, res: r.res})
+		comments = append(comments, &CommentResponse{p: v, res: r.res})
 	}
 
 	return comments

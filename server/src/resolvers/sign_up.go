@@ -23,11 +23,9 @@ func (r *Resolvers) SignUp(args signUpMutationArgs) (*QueryResponse, error) {
 	newUser.CreatedAt = time.Now()
 	newUser.UpdatedAt = time.Now()
 
-	r.DB.Create(&newUser)
-
-	if !r.DB.Where("username = ?", args.UserName).First(&model.User{}).RecordNotFound() {
+	if err := r.DB.Create(&newUser).Error; err!=nil {
 		msg := "Error occured while registering. Try again after some time."
-		return &QueryResponse{Status: 101, Msg: &msg}, nil
+		return &QueryResponse{Status: 101, Msg: &msg}, nil		
 	}
 
 	return &QueryResponse{Status: 100, Msg: nil}, nil

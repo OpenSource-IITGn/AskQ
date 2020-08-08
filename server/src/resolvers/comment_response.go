@@ -1,11 +1,8 @@
 package resolvers
 
 import (
-	"strconv"
-
-	graphql "github.com/graph-gophers/graphql-go"
-
 	"model"
+	"fmt"
 )
 
 
@@ -15,9 +12,8 @@ type CommentResponse struct {
 }
 
 // ID for CommentResponse
-func (r *CommentResponse) ID() graphql.ID {
-	id := strconv.Itoa(int(r.p.ID))
-	return graphql.ID(id)
+func (r *CommentResponse) ID() string {
+	return fmt.Sprint(r.p.ID)
 }
 
 // CreatedAt for CommentResponse
@@ -41,5 +37,5 @@ func (r *CommentResponse) User() *UserResponse {
 	if err := r.res.DB.Model(r.p).Related(&user, "User").Error; err != nil {
 		return nil
 	}
-	return &UserResponse{u: &user}
+	return &UserResponse{U: &user}
 }

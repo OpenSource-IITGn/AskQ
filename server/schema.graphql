@@ -7,14 +7,21 @@ type Mutation {
   signIn(email: String!, password: String!): SignInResponse!
   changePassword(password: String!): QueryResponse!
   changeProfile(userName: String, firstName: String, lastName: String, avatar: String): QueryResponse!
-  createPost(posttype: Int!, title: String, body: String!, tags: [String]): QueryResponse!
-  updatePost(pid: ID!, title: String, body: String!, tags: [String]): QueryResponse!
-  deletePost(pid: ID!): QueryResponse!
-  createComment(pid: ID!, body: String!): QueryResponse
-  updateComment(cid: ID!, body: String!): QueryResponse!
-  deleteComment(cid: ID!): QueryResponse!
+  createPost(posttype: Int!, quesid: String, title: String, body: String!, tags: Tags!): QueryResponse!
+  #updatePost(id: String!, title: String, body: String!, tags: [String]): QueryResponse!
+  #deletePost(id: String!): QueryResponse!
+  #createComment(id: String!, body: String!): QueryResponse
+  #updateComment(id: String!, body: String!): QueryResponse!
+  #deleteComment(id: String!): QueryResponse!
 }
 
+input Tags {
+  tag1: String
+  tag2: String
+  tag3: String
+  tag4: String
+  tag5: String
+}
 
 type QueryResponse {
   ok: Int!
@@ -28,7 +35,7 @@ type SignInResponse {
 }
 # Base user type
 type User {
-  id: ID!
+  id: String!
   email: String!
   username: String!
   firstname: String
@@ -41,9 +48,9 @@ type User {
 # Type Comment
 # Note: Removed Post as Comment cannot be used to find post
 type Comment {
-	id: ID!
+	id: String!
 	user: User
-	body: String!
+	body: String
 	createdAt: String!
 	updatedAt: String!
 }
@@ -55,15 +62,15 @@ type Comment {
 
 # Post Type
 type Post {
-	id: ID!
+	id: String!
 	posttype: Int!
 	user: User
-	body: String!
+	body: String
 	vote: Int!
-	comments: [Comment]
+	comments: [Comment]!
 	title: String
 	tags: [String]!
-	answers: [Post]
+	answers: [Post]!
 	createdAt: String!
 	updatedAt: String!
 }
@@ -72,14 +79,14 @@ type Post {
 type Query {
 	getMyProfile: GetProfileResponse!
 	getProfile(username: String!): GetProfileResponse!
-	getPosts(query: String, first: Int!, offset: Int!, user: ID): GetPostsResponse!
-	getQuestions(query: String, first: Int!, offset: Int!, user: ID): GetPostsResponse!
-	getAnswers(query: String, first: Int!, offset: Int!, user: ID): GetPostsResponse!
-	getPostDetailsByID(pid: ID!): GetPostResponse!
+	#getPosts(query: String, first: Int!, offset: Int!, user: String): GetPostsResponse!
+	#getQuestions(query: String, first: Int!, offset: Int!, user: String): GetPostsResponse!
+	#getAnswers(query: String, first: Int!, offset: Int!, user: String): GetPostsResponse!
+	getPostDetailsByID(id: String!): GetPostResponse!
 }
 
 type GetPostResponse {
-	ok: Boolean!
+	ok: Int!
 	error: String
 	post: Post
 }
