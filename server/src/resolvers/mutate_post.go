@@ -95,3 +95,85 @@ func (r *Resolvers) CreatePost(ctx context.Context ,args CreatePostArgs) (*Query
 
 	return &QueryResponse{Status: 300, Msg: nil}, nil
 }
+
+// Update Post
+
+type UpdatePostArgs struct {
+	Pid		string
+	Title 	*string
+	Body	*string
+	Tags 	TagList
+}
+
+func (r *Resolvers) UpdatePost(ctx context.Context, args UpdatePostArgs) (*QueryResponse, error) {
+	profile, _ := r.GetMyProfile(ctx)
+
+	if profile.Status!=200 {
+		return &QueryResponse{Status: profile.Status, Msg: profile.Msg}, nil
+	}
+
+	post := model.Post{}
+	if r.DB.Where("id = ?", args.Id).First(&post).RecordNotFound() {
+		msg := "Not Found. Are you trying something you are not meant to?"
+		return &QueryResponse{Status: 301, Msg: &msg}, nil
+	}
+
+	if post.UserID != profile.User.U.ID {
+		msg := "Not Authorized. Please do not poke into others work."
+		return &QueryResponse{Status: 308, Msg: &msg}, nil
+	}
+
+	if args.Body !=nil {
+		post.Body = *args.Body
+	}
+
+	if post.PostType == 0{
+		if args.Title != nil {
+			post.Title = *args.Title
+		}
+
+		if args.Tags.Tag1 !=nil {
+			post.Tag1 = *args.Tags.Tag1
+		}
+		if args.Tags.Tag2 !=nil {
+			post.Tag2 = *args.Tags.Tag2
+		}
+		if args.Tags.Tag3 !=nil {
+			post.Tag3 = *args.Tags.Tag3
+		}
+		if args.Tags.Tag4 !=nil {
+			post.Tag4 = *args.Tags.Tag4
+		}
+		if args.Tags.Tag5 !=nil {
+			post.Tag5 = *args.Tags.Tag5
+		}		
+	}
+
+	if err := r.DB.Save(&post).Error; err != nil {
+		msg:= "Error while updating"
+		return &QueryResponse{Status: 306, Msg: &msg}, nil
+	}
+
+}
+
+func (r *Resolvers) DeletePost(ctx context.Context, args struct{Pid string}) (*QueryResponse, error) {
+	profile, _ := r.GetMyProfile(ctx)
+
+	if profile.Status!=200 {
+		return &QueryResponse{Status: profile.Status, Msg: profile.Msg}, nil
+	}
+
+	post := model.Post{}
+	if r.DB.Where("id = ?", args.Id).First(&post).RecordNotFound() {
+		msg := "Not Found. Are you trying something you are not meant to?"
+		return &QueryResponse{Status: 301, Msg: &msg}, nil
+	}
+
+	if post.UserID != profile.User.U.ID {
+		msg := "Not Authorized. Please do not poke into others work."
+		return &QueryResponse{Status: 308, Msg: &msg}, nil
+	}
+
+	// TODO Complete after comment mut completed
+
+}

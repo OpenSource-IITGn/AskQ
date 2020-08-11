@@ -22,3 +22,4 @@
 6. Create Post Failure : 305
 7. Post Update Failure : 306
 8. No Title Question : 307
+9. Unauthorized update : 308

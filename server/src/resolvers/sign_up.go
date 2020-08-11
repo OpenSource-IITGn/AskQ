@@ -13,7 +13,7 @@ func (r *Resolvers) SignUp(args signUpMutationArgs) (*QueryResponse, error) {
 		return &QueryResponse{Status: 104, Msg: &msg}, nil
 	}
 
-	if !r.DB.Where("username = ?", args.UserName).First(&model.User{}).RecordNotFound() {
+	if !r.DB.Where("user_name = ?", args.UserName).First(&model.User{}).RecordNotFound() {
 		msg := "UserName Already in Use"
 		return &QueryResponse{Status: 103, Msg: &msg}, nil
 	}
