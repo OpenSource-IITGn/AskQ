@@ -1,0 +1,16 @@
+.comment-section {
+    margin: 0 .5em;
+    padding-top: 0;
+}
+
+.comment {
+    padding: 1em;
+    opacity: 0.6;
+    font-size: 12px;
+    color: #000;
+}
+
+.small-heading {
+    font-weight: 800;
+    padding: 0.5em 1em;
+}

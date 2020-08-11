@@ -1,0 +1,19 @@
+.question-row {
+    margin: 2em 2em 0 2em;
+    background-color: white;
+    -webkit-box-shadow: 0px 69px 96px -67px rgba(204, 204, 204, 0.56);
+    -moz-box-shadow: 0px 69px 96px -67px rgba(204, 204, 204, 0.56);
+    box-shadow: 0px 69px 96px -67px rgba(204, 204, 204, 0.56);
+}
+
+.question-row:hover {
+    cursor: pointer;
+}
+
+.question-title {
+    color: #000;
+}
+
+.comments-body .rs-panel-body {
+    padding-top: 0 !important;
+}

@@ -1,13 +1,12 @@
 package resolvers
 
 import (
-	"model"
 	"fmt"
+	"model"
 )
 
-
 type CommentResponse struct {
-	p *model.Comment
+	p   *model.Comment
 	res *Resolvers
 }
 

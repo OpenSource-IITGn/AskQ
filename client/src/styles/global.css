@@ -1,0 +1,43 @@
+.centered-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.body-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 56px);
+}
+
+.full-height {
+    min-height: 100vh;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.top-margin {
+    margin-top: 3em;
+}
+
+.container-heading {
+    color: black;
+    font-weight: 800;
+}
+
+.horizontal-margin {
+    margin-left: 2em;
+    margin-right: 2em;
+}
+
+.post-card {
+    margin: 2em 2em 0 2em;
+    background-color: white;
+    -webkit-box-shadow: 0px 69px 96px -67px rgba(204, 204, 204, 0.56);
+    -moz-box-shadow: 0px 69px 96px -67px rgba(204, 204, 204, 0.56);
+    box-shadow: 0px 69px 96px -67px rgba(204, 204, 204, 0.56);
+}
