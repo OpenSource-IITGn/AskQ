@@ -1,0 +1,11 @@
+.user-name {
+    font-weight: 600;
+}
+
+.answer-time {
+    font-size: 80%;
+}
+
+.comments-body .rs-panel-body {
+    padding-top: 0 !important;
+}
