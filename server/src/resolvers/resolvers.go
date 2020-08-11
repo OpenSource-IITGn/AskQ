@@ -9,9 +9,10 @@ type Resolvers struct {
 	*db.DB
 }
 
+// QueryResponse type
 type QueryResponse struct {
-	Status		int32
-	Msg			*string
+	Status int32
+	Msg    *string
 }
 
 // Ok for QueryResponse
@@ -26,9 +27,9 @@ func (r *QueryResponse) Error() *string {
 
 // Profile Response Type
 type GetProfileResponse struct {
-	Status		int32
-	Msg 		*string
-	User 		*UserResponse
+	Status int32
+	Msg    *string
+	User   *UserResponse
 }
 
 // Ok for GetProfileResponse

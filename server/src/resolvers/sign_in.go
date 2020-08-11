@@ -2,15 +2,14 @@ package resolvers
 
 import (
 	"fmt"
-	"model"
 	"jwtutil"
+	"model"
 )
 
 // SignIn mutation creates user
 func (r *Resolvers) SignIn(args signInMutationArgs) (*SignInResponse, error) {
 	user := model.User{}
-
-	if err:= r.DB.Where("email = ?", args.Email).First(&user).Error; err!=nil {
+	if err := r.DB.Where("email = ?", args.Email).First(&user).Error; err != nil {
 		msg := "Not Sign up yet"
 		return &SignInResponse{Status: false, Msg: &msg, Token: nil}, nil
 	}
