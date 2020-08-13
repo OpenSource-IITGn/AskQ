@@ -13,7 +13,7 @@ function CreateQuestion(props) {
                 <FlexboxGrid justify="center" className="full-width">
                     <FlexboxGrid.Item colspan={16}>
                         <Panel header={<h3>Add Question</h3>} className="auth-card" shaded>
-                            <AddQuestionForm />
+                            <AddQuestionForm {...props} />
                         </Panel>
                     </FlexboxGrid.Item>
                 </FlexboxGrid>

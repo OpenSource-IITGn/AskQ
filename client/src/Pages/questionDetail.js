@@ -5,8 +5,10 @@ import CustomNavbar from '../Components/navbar'
 import './../styles/questions.css'
 import './../styles/global.css'
 import Question from './../Components/question';
+import QuestionDetails from '../Components/questionDetails'
 
 function QuestionDetail(props) {
+
     return (
         <Container className="full-height">
             <Header>
@@ -15,7 +17,7 @@ function QuestionDetail(props) {
             <Content className="horizontal-margin top-margin">
                 <FlexboxGrid justify="center" className="">
                     <FlexboxGrid.Item colspan={14}>
-                        <Question showDetailed={true} />
+                        <QuestionDetails {...props} />
                     </FlexboxGrid.Item>
                 </FlexboxGrid>
             </Content>
