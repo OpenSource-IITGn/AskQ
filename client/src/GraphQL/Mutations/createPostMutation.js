@@ -24,16 +24,20 @@ export const useCreatePostMutation = () => {
 
     //we have rewritten the function to have a cleaner interface
     const createPost = async (posttype, quesid, title, body, tags) => {
-        const [tag1, tag2, tag3, tag4, tag5] = tags.split(",")
-
-        const tagsList = {
-            tag1: tag1,
-            tag2: tag2,
-            tag3: tag3,
-            tag4: tag4,
-            tag5: tag5,
+        console.log(posttype, quesid, title, body, tags)
+        let tagsList = null
+        if (tags) {
+            const [tag1, tag2, tag3, tag4, tag5] = tags.split(",")
+            tagsList = {
+                tag1: tag1,
+                tag2: tag2,
+                tag3: tag3,
+                tag4: tag4,
+                tag5: tag5,
+            }
         }
-        console.log(posttype, quesid, title, body, tagsList)
+
+        console.log(tagsList)
         return mutation({
             variables: {
                 posttype: posttype,

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Container, Header, Content, FlexboxGrid, Panel, Footer } from 'rsuite';
 
 import CustomNavbar from '../Components/navbar'
-import SignupForm from '../Components/signupForm'
+import SignupForm from '../Components/Forms/signupForm'
 
 function Signup(props) {
     return (

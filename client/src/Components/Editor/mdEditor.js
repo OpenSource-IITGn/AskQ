@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { convertToRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
-import draftToMarkdown from 'draftjs-to-markdown';
+import draftToHtml from 'draftjs-to-html';
+// import htmlToDraft from 'html-to-draftjs';
+
 
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
@@ -18,7 +20,7 @@ class MdEditor extends Component {
 
     handleChange = () => {
         const { editorState } = this.state;
-        const value = editorState && draftToMarkdown(convertToRaw(editorState.getCurrentContent()))
+        const value = editorState && draftToHtml(convertToRaw(editorState.getCurrentContent()))
         this.props.handleChange(value);
     }
 

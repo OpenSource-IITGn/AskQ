@@ -1,6 +1,6 @@
 import React from 'react'
 import CustomNavbar from '../Components/navbar'
-import LoginForm from '../Components/loginForm'
+import LoginForm from '../Components/Forms/loginForm'
 import { Container, Header, Content, FlexboxGrid, Panel, Footer } from 'rsuite';
 
 import './../styles/global.css'

@@ -29,14 +29,20 @@ query getPostDetailsByID($id : String!)  {
           id
           body
           vote
-          comments {
-          id
-          body
+          createdAt
+          updatedAt 
           user {
             id
             username
           }
-        }
+          comments {
+            id
+            body
+            user {
+              id
+              username
+            }
+          }
         }
         createdAt
         updatedAt 

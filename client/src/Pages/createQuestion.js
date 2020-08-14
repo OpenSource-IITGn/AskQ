@@ -1,7 +1,7 @@
 import React from 'react'
 import { Container, Header, Content, FlexboxGrid, Panel, Footer } from 'rsuite'
 import CustomNavbar from './../Components/navbar'
-import AddQuestionForm from './../Components/addQuestionForm'
+import AddQuestionForm from './../Components/Forms/addQuestionForm'
 
 function CreateQuestion(props) {
     return (
