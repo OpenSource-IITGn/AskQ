@@ -3,6 +3,8 @@ package resolvers
 import "model"
 import "context"
 import "strconv"
+import "fmt"
+import gorm "github.com/jinzhu/gorm"
 
 // Create Post
 
@@ -93,7 +95,7 @@ func (r *Resolvers) CreatePost(ctx context.Context ,args CreatePostArgs) (*Query
 		return &QueryResponse{Status: 305, Msg: &msg}, nil
 	}
 
-	return &QueryResponse{Status: 300, Msg: nil}, nil
+	return &QueryResponse{Status: 300, Msg: fmt.Sprint(post.ID)}, nil
 }
 
 // Update Post
@@ -154,6 +156,16 @@ func (r *Resolvers) UpdatePost(ctx context.Context, args UpdatePostArgs) (*Query
 		return &QueryResponse{Status: 306, Msg: &msg}, nil
 	}
 
+	return &QueryResponse{Status: 300, Msg: fmt.Sprint(post.ID)}, nil
+}
+
+// Delete Post
+
+// Delete Post Comments
+func deletePostComments(tx *gorm.DB, postid string) {
+	var comids []uint64
+	tx.Where("post_id = ?", postid).Find(&model.Comment{}).Pluck("id", &comids)
+
 }
 
 func (r *Resolvers) DeletePost(ctx context.Context, args struct{Pid string}) (*QueryResponse, error) {
@@ -174,6 +186,7 @@ func (r *Resolvers) DeletePost(ctx context.Context, args struct{Pid string}) (*Q
 		return &QueryResponse{Status: 308, Msg: &msg}, nil
 	}
 
-	// TODO Complete after comment mut completed
+	// Beginning delete transaction
+	tx := r.DB.Begin()
 
 }
