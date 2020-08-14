@@ -8,11 +8,11 @@ type Mutation {
   changePassword(password: String!): QueryResponse!
   changeProfile(userName: String, firstName: String, lastName: String, avatar: String): QueryResponse!
   createPost(posttype: Int!, quesid: String, title: String, body: String!, tags: Tags!): QueryResponse!
-  #updatePost(id: String!, title: String, body: String!, tags: [String]): QueryResponse!
-  #deletePost(id: String!): QueryResponse!
-  #createComment(id: String!, body: String!): QueryResponse
-  #updateComment(id: String!, body: String!): QueryResponse!
-  #deleteComment(id: String!): QueryResponse!
+  updatePost(pid: String!, title: String, body: String, tags: Tags!): QueryResponse!
+  deletePost(pid: String!): QueryResponse!
+  createComment(pid: String!, body: String!): QueryResponse!
+  updateComment(cid: String!, body: String!): QueryResponse!
+  deleteComment(cid: String!): QueryResponse!
 }
 
 input Tags {

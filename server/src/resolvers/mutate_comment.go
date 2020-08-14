@@ -24,7 +24,7 @@ func (r * Resolvers) CreateComment(ctx context.Context, args CreateCommentArgs) 
 	comment.User = *(profile.User.U)
 
 	// Set PostId
-	pid, err := strconv.ParseUint(*args.QuesID, 10, 64);
+	pid, err := strconv.ParseUint(args.Pid, 10, 64);
 	if err != nil {
 		msg := "Invalid Id. Are you trying to panic me? :("
 		return &QueryResponse{Status: 302, Msg: &msg}, nil
@@ -74,7 +74,9 @@ func (r *Resolvers) UpdateComment(ctx context.Context, args UpdateCommentArgs) (
 		return &QueryResponse{Status: 306, Msg: &msg}, nil
 	}
 
-	return &QueryResponse{Status: 300, Msg: fmt.Sprint(comment.ID)}, nil
+	msg := fmt.Sprint(comment.ID)
+
+	return &QueryResponse{Status: 300, Msg: &msg}, nil
 }
 
 // Currently Hard Delete
@@ -102,5 +104,7 @@ func (r * Resolvers) DeleteComment(ctx context.Context, args struct{ Cid string}
 		return &QueryResponse{Status: 309, Msg: &msg}, nil
 	}
 
-	return &QueryResponse{Status: 300, Msg: fmt.Sprint(comment.ID)}, nil
+	msg := fmt.Sprint(comment.ID)
+
+	return &QueryResponse{Status: 300, Msg: &msg}, nil
 }
