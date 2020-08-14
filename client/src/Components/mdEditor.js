@@ -16,8 +16,13 @@ class MdEditor extends Component {
         });
     };
 
-    render() {
+    handleChange = () => {
         const { editorState } = this.state;
+        const value = editorState && draftToMarkdown(convertToRaw(editorState.getCurrentContent()))
+        this.props.handleChange(value);
+    }
+
+    render() {
         return (
             <div>
                 <Editor
@@ -25,11 +30,8 @@ class MdEditor extends Component {
                     editorClassName="editor"
                     onEditorStateChange={this.onEditorStateChange}
                     placeholder={this.props.placeHolder}
+                    onChange={this.handleChange}
                 />
-                {/* <textarea
-                    disabled
-                    value={editorState && draftToMarkdown(convertToRaw(editorState.getCurrentContent()))}
-                /> */}
             </div>
         );
     }

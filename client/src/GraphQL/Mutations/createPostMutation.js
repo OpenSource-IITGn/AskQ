@@ -1,16 +1,16 @@
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
-import { useAuthToken } from "../../hooks/auth";
 
 
 export const CREATE_POST = gql`
   mutation createPost($posttype: Int!, $quesid: String, $title: String, $body: String!, $tags: Tags!){
-    createPost(posttype: Int!, quesid: String, title: String, body: String!, tags: Tags!) {
+    createPost(posttype: $posttype, quesid: $quesid, title: $title, body: $body, tags: $tags) {
         ok
         error
     }
   }
 `;
+
 
 export const useCreatePostMutation = () => {
     // const [_, setAuthToken, removeAuthtoken] = useAuthToken();
@@ -26,23 +26,24 @@ export const useCreatePostMutation = () => {
     const createPost = async (posttype, quesid, title, body, tags) => {
         const [tag1, tag2, tag3, tag4, tag5] = tags.split(",")
 
-        tags = {
+        const tagsList = {
             tag1: tag1,
             tag2: tag2,
             tag3: tag3,
             tag4: tag4,
             tag5: tag5,
         }
+        console.log(posttype, quesid, title, body, tagsList)
         return mutation({
             variables: {
                 posttype: posttype,
                 quesid: quesid,
                 title: title,
                 body: body,
-                tags: tags
+                tags: tagsList
             }
         })
 
     }
-    return [login, mutationResults]
+    return [createPost, mutationResults]
 };
