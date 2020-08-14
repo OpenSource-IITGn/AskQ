@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Form, FormGroup, ControlLabel, HelpBlock, ButtonToolbar, Button, FormControl, Panel, FlexboxGrid } from 'rsuite'
-import { useCreatePostMutation } from '../GraphQL/Mutations/createPostMutation';
+import { useCreatePostMutation } from '../../GraphQL/Mutations/createPostMutation';
 
-import MdEditor from './../Components/mdEditor'
-import './../styles/global.css'
+import MdEditor from '../Editor/mdEditor'
+import './../../styles/global.css'
 
 
 function AddQuestionForm(props) {

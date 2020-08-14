@@ -1,7 +1,7 @@
 import React from 'react'
 import { List, FlexboxGrid } from 'rsuite'
 
-import './../styles/comments.css'
+import './../../styles/comments.css'
 
 function Comment() {
     return (

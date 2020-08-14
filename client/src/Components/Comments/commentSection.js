@@ -1,8 +1,8 @@
 import React from 'react'
 import { List, FlexboxGrid } from 'rsuite';
-import Comment from './../Components/comment'
+import Comment from './comment'
 
-import './../styles/comments.css'
+import './../../styles/comments.css'
 
 function CommentSection() {
     return (

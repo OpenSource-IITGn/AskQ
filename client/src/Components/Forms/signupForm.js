@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Form, FormGroup, FormControl, ControlLabel, HelpBlock, Button, ButtonToolbar } from 'rsuite';
-import { useSignupMutation } from '../GraphQL/Mutations/signupMutation'
+import { useSignupMutation } from '../../GraphQL/Mutations/signupMutation'
 
-import '../styles/global.css';
+import '../../styles/global.css';
 
 
 const SignupForm = (props, { loading }) => {

@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Form, FormGroup, FormControl, ControlLabel, HelpBlock, Button, ButtonToolbar } from 'rsuite';
-import '../styles/global.css';
+import './../../styles/global.css';
 
-import { useLoginMutation } from '../GraphQL/Mutations/loginMutation';
+import { useLoginMutation } from '../../GraphQL/Mutations/loginMutation';
 
 const LoginForm = (props, { loading }) => {
     const [loginMutation, loginMutationResults] = useLoginMutation();
@@ -15,7 +15,6 @@ const LoginForm = (props, { loading }) => {
     const handleSubmit = async () => {
         await loginMutation(email, password)
         props.history.push('/questions')
-        console.log(loginMutationResults)
     }
 
     const handleChange = (value, evt) => {

@@ -4,7 +4,7 @@ import ProtectedRoute from './protected';
 import Home from './../Pages/home';
 import Login from './../Pages/login';
 import Signup from './../Pages/signup';
-import Secret from './../Components/secret';
+// import Secret from './../Components/';
 import Questions from './../Pages/questions';
 import QuestionDetail from './../Pages/questionDetail';
 import CreateQuestion from './../Pages/createQuestion';
@@ -23,7 +23,7 @@ export default class Routes extends Component {
                 <ProtectedRoute exact path="/questions/create" component={CreateQuestion} />
                 <Route exact path="/questions/:id" render={(routeProps) => <QuestionDetail {...routeProps} />} />
 
-                <ProtectedRoute exact path="/secret" component={Secret} />
+                {/* <ProtectedRoute exact path="/secret" component={Secret} /> */}
             </Switch>
 
         )

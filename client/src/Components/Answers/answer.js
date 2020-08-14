@@ -1,20 +1,24 @@
 import React from 'react'
 import { Panel, Divider, FlexboxGrid, ButtonToolbar, Button, Icon } from 'rsuite'
-import './../styles/answer.css'
-import CommentSection from './commentSection'
+import './../../styles/answer.css'
+import CommentSection from './../Comments/commentSection'
 
-function Answer() {
+function Answer(props) {
+
+    const { answerDetails } = props
+    const { id, body, comments, vote, user, createdAt } = answerDetails
+    const { username } = user
+
     return (
         <div className="">
             <Panel className="post-card">
                 <div>
-                    <p className="user-name">Husain Johnson</p>
-                    <p className="answer-time">Answered a year ago</p>
+                    <p className="user-name">{username}</p>
+                    <p className="answer-time">Answered {createdAt} ago</p>
                 </div>
                 <Divider />
                 <div>
-                    Zubat Leaf Green. Pokemon 4Ever Leech Life Delibird Ambipom fishing rod Swalot Grimer. Velit esse cillum dolore eu fugiat nulla pariatur Lucario Yellow Stantler Dugtrio Drifblim Teleport.
-                    Zubat Leaf Green. Pokemon 4Ever Leech Life Delibird Ambipom fishing rod Swalot Grimer. Velit esse cillum dolore eu fugiat nulla pariatur Lucario Yellow Stantler Dugtrio Drifblim Teleport.
+                    <article dangerouslySetInnerHTML={{ __html: body }}></article>
                 </div>
                 <Divider />
 
@@ -22,7 +26,7 @@ function Answer() {
                     <FlexboxGrid.Item>
                         <ButtonToolbar>
                             <Button><Icon icon='thumbs-o-up' /></Button>
-                            <Button>4 Votes</Button>
+                            <Button>{vote} Votes</Button>
                             <Button><Icon icon='thumbs-o-down' /></Button>
                             <span style={{ margin: "0 1em" }}></span>
                         </ButtonToolbar>

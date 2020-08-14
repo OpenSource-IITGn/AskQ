@@ -1,8 +1,7 @@
 import React from 'react'
 import { FlexboxGrid, Button, Divider, Panel, Tag, TagGroup, ButtonGroup, ButtonToolbar, Icon } from 'rsuite'
-import ReactMarkdown from 'react-markdown'
 
-import "./../styles/questions.css"
+import "./../../styles/questions.css"
 
 
 function Question(props) {
@@ -25,8 +24,7 @@ function Question(props) {
                     </div>
                     <br />
                     <div className="">
-                        {body}
-                        <ReactMarkdown source={body} />
+                        <article dangerouslySetInnerHTML={{ __html: body }}></article>
                     </div>
                     <br />
                     <FlexboxGrid justify="end">

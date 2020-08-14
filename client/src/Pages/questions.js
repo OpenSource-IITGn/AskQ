@@ -1,7 +1,7 @@
 import React from 'react'
 import CustomNavbar from '../Components/navbar'
 import { Button, Container, Header, Content, FlexboxGrid, Footer, Divider } from 'rsuite'
-import Question from './../Components/question';
+import Question from './../Components/Questions/question';
 import CustomPagination from './../Components/pagination';
 
 import './../styles/questions.css';
