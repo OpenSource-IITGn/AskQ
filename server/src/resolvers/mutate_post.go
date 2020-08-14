@@ -162,10 +162,12 @@ func (r *Resolvers) UpdatePost(ctx context.Context, args UpdatePostArgs) (*Query
 // Delete Post
 
 // Delete Post Comments
-func deletePostComments(tx *gorm.DB, postid string) {
-	var comids []uint64
-	tx.Where("post_id = ?", postid).Find(&model.Comment{}).Pluck("id", &comids)
-
+func deletePostComments(tx *gorm.DB, postid uint64) error {
+	if err := tx.Unscoped().Where("post_id = ?", postid).Delete(&model.Comment{}).Error; err!=nil{
+		return err
+	}
+	err := tx.Unscoped().Where("id = ?", postid).Delete(&model.Post{}).Error
+	return err
 }
 
 func (r *Resolvers) DeletePost(ctx context.Context, args struct{Pid string}) (*QueryResponse, error) {
@@ -176,17 +178,38 @@ func (r *Resolvers) DeletePost(ctx context.Context, args struct{Pid string}) (*Q
 	}
 
 	post := model.Post{}
-	if r.DB.Where("id = ?", args.Id).First(&post).RecordNotFound() {
+	if r.DB.Where("id = ?", args.Pid).First(&post).RecordNotFound() {
 		msg := "Not Found. Are you trying something you are not meant to?"
 		return &QueryResponse{Status: 301, Msg: &msg}, nil
 	}
 
+	// To be removed: Believe the token
 	if post.UserID != profile.User.U.ID {
 		msg := "Not Authorized. Please do not poke into others work."
 		return &QueryResponse{Status: 308, Msg: &msg}, nil
 	}
 
+	// Post ids to be deleted
+	var postids []uint64
+	// List answers if question
+	if post.PostType == 0 {
+		r.DB.Where("ques_id = ?", post.ID).Find(&post).Pluck("id", &postids)
+	}
+	// Add original post
+	postids = append(postids, post.ID)
 	// Beginning delete transaction
 	tx := r.DB.Begin()
+	msg := "Delete Error. Unexpected error. Please try again later"
+	for _, v := range(postids) {
+		if err := deletePostComments(tx, v); err!=nil{
+			tx.Rollback()
+			return &QueryResponse{Status: 309, Msg: &msg}, nil
+		}
+	}
 
+	if err := tx.Commit().Error; err!=nil{
+		return &QueryResponse{Status: 308, Msg: &msg}, nil
+	}
+
+	return &QueryResponse{Status: 300, Msg: fmt.Sprint(post.ID)}, nil
 }
