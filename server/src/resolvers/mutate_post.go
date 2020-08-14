@@ -115,7 +115,7 @@ func (r *Resolvers) UpdatePost(ctx context.Context, args UpdatePostArgs) (*Query
 	}
 
 	post := model.Post{}
-	if r.DB.Where("id = ?", args.Id).First(&post).RecordNotFound() {
+	if r.DB.Where("id = ?", args.Pid).First(&post).RecordNotFound() {
 		msg := "Not Found. Are you trying something you are not meant to?"
 		return &QueryResponse{Status: 301, Msg: &msg}, nil
 	}
