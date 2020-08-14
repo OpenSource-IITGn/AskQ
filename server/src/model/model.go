@@ -8,7 +8,7 @@ import (
 
 // User type
 type User struct {
-	ID 			uint64 `gorm:"primary_key"`	
+	ID uint64 `gorm:"primary_key"`
 	Email		string `gorm:"type:varchar(100);not null;unique"`
 	Password	string `gorm:"not null;type:varchar(100)"`
 	UserName	string `gorm:"type:varchar(50);unique;not null;index"`
@@ -17,24 +17,22 @@ type User struct {
 	Avatar		string `gorm:"type:varchar(4096)"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	DeletedAt time.Time
 }
 
 // Comment Type
 type Comment struct {
-	ID 			uint64 `gorm:"primary_key"`
+	ID uint64 `gorm:"primary_key"`
 	User 		User `gorm:"foreignkey:UserID"`
 	UserID		uint64
 	Body		string `gorm:"type:text";not null`
 	PostID		uint64 `gorm:"index;not null"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	DeletedAt time.Time
 }
 
 // Post Type
 type Post struct {
-	ID 			uint64 `gorm:"primary_key"`
+	ID uint64 `gorm:"primary_key"`
 	// Defining User
 	User 		User `gorm:"foreignkey:UserID"`
 	UserID		uint64
@@ -57,5 +55,4 @@ type Post struct {
 	Tag5		string `gorm:"type:varchar(50)"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	DeletedAt time.Time
 }
