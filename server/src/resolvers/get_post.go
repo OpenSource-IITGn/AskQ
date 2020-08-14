@@ -12,10 +12,15 @@ func (r *Resolvers) GetPostDetailsByID(args struct {Id string}) (*GetPostRespons
 	return &GetPostResponse{Status : 300, Msg: nil, Post: &PostResponse{p: &post, res: r}}, nil
 }
 
+// func (r *Resolvers) GetQuestions(args GetPostsArgs) (*GetPostsResponse, error) {
+	
+// }
 
 type GetPostsArgs struct {
-	Query string
-	First int32
+	Query 	*string
+	First 	uint64
+	Offset	uint64
+	User	*string
 }
 
 type GetPostResponse struct {

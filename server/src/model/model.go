@@ -1,45 +1,40 @@
 package model
 
 import (
-	"github.com/jinzhu/gorm"
 	// gorm postgres dialect
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"time"
 )
 
-// gorm.Model definition
-type Model struct {
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt time.Time
-}
-
 // User type
 type User struct {
-	gorm.Model
-	ID 			uint64 `gorm:"type:bigint:primary_key"`	
+	ID 			uint64 `gorm:"type:bigint;primary_key"`	
 	Email		string `gorm:"type:varchar(100);not null;unique"`
 	Password	string `gorm:"not null;type:varchar(100)"`
 	UserName	string `gorm:"type:varchar(50);unique;not null;index"`
 	FirstName	string `gorm:"type:varchar(50)"`
 	LastName 	string `gorm:"type:varchar(50)"`
 	Avatar		string `gorm:"type:varchar(4096)"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt time.Time
 }
 
 // Comment Type
 type Comment struct {
-	gorm.Model
-	ID 			uint64 `gorm:"type:bigint:primary_key"`
+	ID 			uint64 `gorm:"type:bigint;primary_key"`
 	User 		User `gorm:"foreignkey:UserID"`
 	UserID		uint64
 	Body		string `gorm:"type:text";not null`
 	PostID		uint64 `gorm:"index;not null"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt time.Time
 }
 
 // Post Type
 type Post struct {
-	gorm.Model
-	ID 			uint64 `gorm:"type:bigint:primary_key"`
+	ID 			uint64 `gorm:"type:bigint;primary_key"`
 	// Defining User
 	User 		User `gorm:"foreignkey:UserID"`
 	UserID		uint64
@@ -60,4 +55,7 @@ type Post struct {
 	Tag3		string `gorm:"type:varchar(50)"`
 	Tag4		string `gorm:"type:varchar(50)"`
 	Tag5		string `gorm:"type:varchar(50)"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt time.Time
 }
