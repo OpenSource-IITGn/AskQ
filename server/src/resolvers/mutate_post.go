@@ -1,10 +1,13 @@
 package resolvers
 
-import "model"
-import "context"
-import "strconv"
-import "fmt"
-import gorm "github.com/jinzhu/gorm"
+import (
+	"context"
+	"fmt"
+	"model"
+	"strconv"
+
+	gorm "github.com/jinzhu/gorm"
+)
 
 // Create Post
 
@@ -17,32 +20,32 @@ type TagList struct {
 }
 
 type CreatePostArgs struct {
-	PostType	int32
-	QuesID		*string
-	Title		*string
-	Body		string
-	Tags		TagList
+	PostType int32
+	QuesID   *string
+	Title    *string
+	Body     string
+	Tags     TagList
 }
 
-func (r *Resolvers) CreatePost(ctx context.Context ,args CreatePostArgs) (*QueryResponse, error) {
+func (r *Resolvers) CreatePost(ctx context.Context, args CreatePostArgs) (*QueryResponse, error) {
 	profile, _ := r.GetMyProfile(ctx)
 
-	if profile.Status!=200 {
+	if profile.Status != 200 {
 		return &QueryResponse{Status: profile.Status, Msg: profile.Msg}, nil
 	}
 
 	// Set user
 	post := model.Post{}
 	post.User = *(profile.User.U)
-	
+
 	// Check if answer and validate Question ID
-	if args.PostType==1 {
+	if args.PostType == 1 {
 		if args.QuesID == nil {
 			msg := "Invalid Id. Are you trying to panic me? :("
-			return &QueryResponse{Status: 302, Msg: &msg}, nil			
+			return &QueryResponse{Status: 302, Msg: &msg}, nil
 		}
 
-		qid, err := strconv.ParseUint(*args.QuesID, 10, 64);
+		qid, err := strconv.ParseUint(*args.QuesID, 10, 64)
 		if err != nil {
 			msg := "Invalid Id. Are you trying to panic me? :("
 			return &QueryResponse{Status: 302, Msg: &msg}, nil
@@ -57,12 +60,12 @@ func (r *Resolvers) CreatePost(ctx context.Context ,args CreatePostArgs) (*Query
 			return &QueryResponse{Status: 303, Msg: &msg}, nil
 		}
 
-		if ques.PostType!=0{
+		if ques.PostType != 0 {
 			msg := "Not a Question. Ever heard of Rhetorical Answers?"
 			return &QueryResponse{Status: 304, Msg: &msg}, nil
 		}
 	} else {
-		
+
 		if args.Title == nil {
 			msg := "No title."
 			return &QueryResponse{Status: 307, Msg: &msg}, nil
@@ -70,32 +73,33 @@ func (r *Resolvers) CreatePost(ctx context.Context ,args CreatePostArgs) (*Query
 
 		post.Title = *args.Title
 
-		if args.Tags.Tag1 !=nil {
+		if args.Tags.Tag1 != nil {
 			post.Tag1 = *args.Tags.Tag1
 		}
-		if args.Tags.Tag2 !=nil {
+		if args.Tags.Tag2 != nil {
 			post.Tag2 = *args.Tags.Tag2
 		}
-		if args.Tags.Tag3 !=nil {
+		if args.Tags.Tag3 != nil {
 			post.Tag3 = *args.Tags.Tag3
 		}
-		if args.Tags.Tag4 !=nil {
+		if args.Tags.Tag4 != nil {
 			post.Tag4 = *args.Tags.Tag4
 		}
-		if args.Tags.Tag5 !=nil {
+		if args.Tags.Tag5 != nil {
 			post.Tag5 = *args.Tags.Tag5
-		}		
+		}
 	}
 
-
 	post.Body = args.Body
+	// set post type
+	post.PostType = args.PostType
 
 	if err := r.DB.Create(&post).Error; err != nil {
-		msg:= "Error while creating post"
+		msg := "Error while creating post"
 		return &QueryResponse{Status: 305, Msg: &msg}, nil
 	}
 
-	msg:= fmt.Sprint(post.ID)
+	msg := fmt.Sprint(post.ID)
 
 	return &QueryResponse{Status: 300, Msg: &msg}, nil
 }
@@ -103,16 +107,16 @@ func (r *Resolvers) CreatePost(ctx context.Context ,args CreatePostArgs) (*Query
 // Update Post
 
 type UpdatePostArgs struct {
-	Pid		string
-	Title 	*string
-	Body	*string
-	Tags 	TagList
+	Pid   string
+	Title *string
+	Body  *string
+	Tags  TagList
 }
 
 func (r *Resolvers) UpdatePost(ctx context.Context, args UpdatePostArgs) (*QueryResponse, error) {
 	profile, _ := r.GetMyProfile(ctx)
 
-	if profile.Status!=200 {
+	if profile.Status != 200 {
 		return &QueryResponse{Status: profile.Status, Msg: profile.Msg}, nil
 	}
 
@@ -127,34 +131,34 @@ func (r *Resolvers) UpdatePost(ctx context.Context, args UpdatePostArgs) (*Query
 		return &QueryResponse{Status: 308, Msg: &msg}, nil
 	}
 
-	if args.Body !=nil {
+	if args.Body != nil {
 		post.Body = *args.Body
 	}
 
-	if post.PostType == 0{
+	if post.PostType == 0 {
 		if args.Title != nil {
 			post.Title = *args.Title
 		}
 
-		if args.Tags.Tag1 !=nil {
+		if args.Tags.Tag1 != nil {
 			post.Tag1 = *args.Tags.Tag1
 		}
-		if args.Tags.Tag2 !=nil {
+		if args.Tags.Tag2 != nil {
 			post.Tag2 = *args.Tags.Tag2
 		}
-		if args.Tags.Tag3 !=nil {
+		if args.Tags.Tag3 != nil {
 			post.Tag3 = *args.Tags.Tag3
 		}
-		if args.Tags.Tag4 !=nil {
+		if args.Tags.Tag4 != nil {
 			post.Tag4 = *args.Tags.Tag4
 		}
-		if args.Tags.Tag5 !=nil {
+		if args.Tags.Tag5 != nil {
 			post.Tag5 = *args.Tags.Tag5
-		}		
+		}
 	}
 
 	if err := r.DB.Save(&post).Error; err != nil {
-		msg:= "Error while updating"
+		msg := "Error while updating"
 		return &QueryResponse{Status: 306, Msg: &msg}, nil
 	}
 
@@ -167,17 +171,17 @@ func (r *Resolvers) UpdatePost(ctx context.Context, args UpdatePostArgs) (*Query
 
 // Delete Post Comments
 func deletePostComments(tx *gorm.DB, postid uint64) error {
-	if err := tx.Unscoped().Where("post_id = ?", postid).Delete(&model.Comment{}).Error; err!=nil{
+	if err := tx.Unscoped().Where("post_id = ?", postid).Delete(&model.Comment{}).Error; err != nil {
 		return err
 	}
 	err := tx.Unscoped().Where("id = ?", postid).Delete(&model.Post{}).Error
 	return err
 }
 
-func (r *Resolvers) DeletePost(ctx context.Context, args struct{Pid string}) (*QueryResponse, error) {
+func (r *Resolvers) DeletePost(ctx context.Context, args struct{ Pid string }) (*QueryResponse, error) {
 	profile, _ := r.GetMyProfile(ctx)
 
-	if profile.Status!=200 {
+	if profile.Status != 200 {
 		return &QueryResponse{Status: profile.Status, Msg: profile.Msg}, nil
 	}
 
@@ -204,14 +208,14 @@ func (r *Resolvers) DeletePost(ctx context.Context, args struct{Pid string}) (*Q
 	// Beginning delete transaction
 	tx := r.DB.Begin()
 	msg := "Delete Error. Unexpected error. Please try again later"
-	for _, v := range(postids) {
-		if err := deletePostComments(tx, v); err!=nil{
+	for _, v := range postids {
+		if err := deletePostComments(tx, v); err != nil {
 			tx.Rollback()
 			return &QueryResponse{Status: 309, Msg: &msg}, nil
 		}
 	}
 
-	if err := tx.Commit().Error; err!=nil{
+	if err := tx.Commit().Error; err != nil {
 		return &QueryResponse{Status: 308, Msg: &msg}, nil
 	}
 
