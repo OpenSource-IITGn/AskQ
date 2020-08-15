@@ -9,6 +9,14 @@ import (
 type PostResponse struct {
 	p *model.Post
 	res *Resolvers
+	pd 	*model.PostDetails
+}
+
+// Get PostDetails
+func getpostdet(p *model.Post, res *Resolvers) *model.PostDetails {
+	postdet := model.PostDetails{}
+	res.DB.First(&postdet, p.ID)
+	return &postdet
 }
 
 // ID for PostResponse
@@ -28,7 +36,10 @@ func (r *PostResponse) UpdatedAt() string {
 
 // Votes for PostResponse
 func (r *PostResponse) Vote() int32 {
-	return r.p.Vote
+	if r.pd == nil {
+		r.pd = getpostdet(r.p, r.res)
+	}
+	return r.pd.Vote
 }
 
 // PostType for PostResponse
@@ -43,7 +54,10 @@ func (r *PostResponse) Title() *string {
 
 // Body for PostResponse
 func (r *PostResponse) Body() *string {
-	return &r.p.Body
+	if r.pd == nil {
+		r.pd = getpostdet(r.p, r.res)
+	}
+	return &r.pd.Body
 }
 
 // Tags for PostResponse
@@ -68,12 +82,16 @@ func (r *PostResponse) User() *UserResponse {
 
 // Answers for PostResponse
 func (r *PostResponse) Answers() []*PostResponse {
+	if r.pd == nil {
+		r.pd = getpostdet(r.p, r.res)
+	}
+
 	if r.p.PostType != 0 {
 		return nil
 	}
 
 	var posts []*model.Post
-	if err:= r.res.DB.Model(r.p).Related(&posts, "Answers").Error; err != nil {
+	if err:= r.res.DB.Model(r.pd).Related(&posts, "Answers").Error; err != nil {
 		return nil
 	}
 
@@ -87,8 +105,12 @@ func (r *PostResponse) Answers() []*PostResponse {
 
 // Comments for PostResponse
 func (r *PostResponse) Comments() []*CommentResponse {
+	if r.pd == nil {
+		r.pd = getpostdet(r.p, r.res)
+	}
+
 	var coms []*model.Comment
-	if err:= r.res.DB.Model(r.p).Related(&coms, "Comments").Error; err != nil {
+	if err:= r.res.DB.Model(r.pd).Related(&coms, "Comments").Error; err != nil {
 		return nil
 	}
 
