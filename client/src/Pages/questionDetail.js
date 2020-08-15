@@ -26,7 +26,6 @@ function QuestionDetail(props) {
     }
 
     const { ok, error, post } = postData.data.getPostDetailsByID
-    console.log(post)
 
     return (
         <Container className="full-height">
@@ -36,7 +35,7 @@ function QuestionDetail(props) {
             <Content className="horizontal-margin top-margin">
                 <FlexboxGrid justify="center" className="">
                     <FlexboxGrid.Item colspan={14}>
-                        <AnswersProvider>
+                        <AnswersProvider initialState={post.answers}>
                             <QuestionDetails {...props} post={post} />
                         </AnswersProvider>
                     </FlexboxGrid.Item>

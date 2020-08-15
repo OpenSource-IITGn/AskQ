@@ -14,7 +14,6 @@ function AddAnswerForm(props) {
     const postType = 1
     const quesid = questionId
     const title = null
-
     // lame hack
     const tags = " , , , , "
 
@@ -32,23 +31,38 @@ function AddAnswerForm(props) {
         )
     }
 
-    console.log(createPostMutationResults)
 
+    const { user } = userData.data.getMyProfile
 
     const handleSubmit = async () => {
-        await createPostMutation(
+        const mutation = await createPostMutation(
             postType,
             quesid,
             title,
             body,
             tags
         )
-        console.log(userData)
-        // props.updateAnswerList(
-        //     {
 
-        //     }
-        // )
+        // another lame hack
+        // console.log(createPostMutationResults)
+        const { data } = mutation
+        const ansId = data.createPost.error
+        setBody("")
+
+        props.onAnswerSubmit(
+            {
+                body: body,
+                comments: [],
+                createdAt: "0 mins",
+                updatedAt: "0 mins",
+                id: ansId,
+                user: {
+                    id: user.id,
+                    username: user.username
+                },
+                vote: 0
+            }
+        )
     }
 
 

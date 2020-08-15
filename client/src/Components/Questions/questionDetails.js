@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect, useContext } from 'react'
 import { Panel } from 'rsuite'
 
 import Question from './question'
 import AnswerList from './../Answers/answerList'
 import CommentSection from './../Comments/commentSection'
+import { AnswersContext } from './../../Contexts/AnswersContext'
 
 function QuestionDetails(props) {
 
@@ -19,7 +20,7 @@ function QuestionDetails(props) {
             <Panel className="comments-body" >
                 <CommentSection />
             </Panel>
-            <AnswerList {...props} answers={answers} />
+            <AnswerList {...props} />
 
         </div>
     )

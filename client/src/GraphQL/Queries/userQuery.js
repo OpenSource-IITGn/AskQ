@@ -9,6 +9,7 @@ query {
       user {
         id
         email
+        username
       }
     }
   }  

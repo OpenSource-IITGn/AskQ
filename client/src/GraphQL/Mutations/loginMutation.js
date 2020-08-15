@@ -19,7 +19,6 @@ export const useLoginMutation = () => {
   const [mutation, mutationResults] = useMutation(USER_SIGNIN, {
     //if the mutation succeed, we save the token for later
     onCompleted: (data) => {
-      console.log(data)
       setAuthToken(data.signIn.token)
     },
   });

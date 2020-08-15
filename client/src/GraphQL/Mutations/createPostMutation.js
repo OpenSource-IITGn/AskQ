@@ -14,7 +14,6 @@ export const CREATE_POST = gql`
 
 export const useCreatePostMutation = () => {
     // const [_, setAuthToken, removeAuthtoken] = useAuthToken();
-
     const [mutation, mutationResults] = useMutation(CREATE_POST, {
         //if the mutation succeed, we save the token for later
         onCompleted: (data) => {
@@ -24,7 +23,6 @@ export const useCreatePostMutation = () => {
 
     //we have rewritten the function to have a cleaner interface
     const createPost = async (posttype, quesid, title, body, tags) => {
-        console.log(posttype, quesid, title, body, tags)
         let tagsList = null
         if (tags) {
             const [tag1, tag2, tag3, tag4, tag5] = tags.split(",")
@@ -36,8 +34,6 @@ export const useCreatePostMutation = () => {
                 tag5: tag5,
             }
         }
-
-        console.log(tagsList)
         return mutation({
             variables: {
                 posttype: posttype,
