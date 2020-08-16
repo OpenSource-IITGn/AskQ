@@ -3,6 +3,7 @@ package resolvers
 import (
 	"context"
 	"fmt"
+	"handler"
 	"model"
 	"strconv"
 
@@ -36,6 +37,8 @@ func (r *Resolvers) CreatePost(ctx context.Context, args CreatePostArgs) (*Query
 
 	// Set user
 	post := model.Post{}
+	postdet := model.PostDetails{}
+	postdet.Post = post
 	post.User = *(profile.User.U)
 
 	// Check if answer and validate Question ID
@@ -50,12 +53,12 @@ func (r *Resolvers) CreatePost(ctx context.Context, args CreatePostArgs) (*Query
 			msg := "Invalid Id. Are you trying to panic me? :("
 			return &QueryResponse{Status: 302, Msg: &msg}, nil
 		} else {
-			post.QuesID = qid
+			postdet.QuesID = qid
 		}
 
 		// Get the question post
 		ques := model.Post{}
-		if r.DB.First(&ques, post.QuesID).RecordNotFound() {
+		if r.DB.First(&ques, qid).RecordNotFound() {
 			msg := "Extinct Question. Why are you answering Extinct Questions?"
 			return &QueryResponse{Status: 303, Msg: &msg}, nil
 		}
@@ -90,11 +93,13 @@ func (r *Resolvers) CreatePost(ctx context.Context, args CreatePostArgs) (*Query
 		}
 	}
 
-	post.Body = args.Body
-	// set post type
-	post.PostType = args.PostType
+	postdet.Body = args.Body
 
 	if err := r.DB.Create(&post).Error; err != nil {
+		msg := "Error while creating post"
+		return &QueryResponse{Status: 305, Msg: &msg}, nil
+	}
+	if err := r.DB.Create(&postdet).Error; err != nil {
 		msg := "Error while creating post"
 		return &QueryResponse{Status: 305, Msg: &msg}, nil
 	}
@@ -114,25 +119,26 @@ type UpdatePostArgs struct {
 }
 
 func (r *Resolvers) UpdatePost(ctx context.Context, args UpdatePostArgs) (*QueryResponse, error) {
-	profile, _ := r.GetMyProfile(ctx)
-
-	if profile.Status != 200 {
-		return &QueryResponse{Status: profile.Status, Msg: profile.Msg}, nil
-	}
-
 	post := model.Post{}
+	postdet := model.PostDetails{}
 	if r.DB.Where("id = ?", args.Pid).First(&post).RecordNotFound() {
 		msg := "Not Found. Are you trying something you are not meant to?"
 		return &QueryResponse{Status: 301, Msg: &msg}, nil
 	}
 
-	if post.UserID != profile.User.U.ID {
+	uid, err := handler.GetUid(ctx)
+	if post.UserID != uid || err != nil {
 		msg := "Not Authorized. Please do not poke into others work."
 		return &QueryResponse{Status: 308, Msg: &msg}, nil
 	}
 
+	if r.DB.Where("post_id = ?", args.Pid).First(&postdet).RecordNotFound() {
+		msg := "Not Found. Are you trying something you are not meant to?"
+		return &QueryResponse{Status: 301, Msg: &msg}, nil
+	}
+
 	if args.Body != nil {
-		post.Body = *args.Body
+		postdet.Body = *args.Body
 	}
 
 	if post.PostType == 0 {
@@ -162,6 +168,11 @@ func (r *Resolvers) UpdatePost(ctx context.Context, args UpdatePostArgs) (*Query
 		return &QueryResponse{Status: 306, Msg: &msg}, nil
 	}
 
+	if err := r.DB.Save(&postdet).Error; err != nil {
+		msg := "Error while updating"
+		return &QueryResponse{Status: 306, Msg: &msg}, nil
+	}
+
 	msg := fmt.Sprint(post.ID)
 
 	return &QueryResponse{Status: 300, Msg: &msg}, nil
@@ -171,28 +182,25 @@ func (r *Resolvers) UpdatePost(ctx context.Context, args UpdatePostArgs) (*Query
 
 // Delete Post Comments
 func deletePostComments(tx *gorm.DB, postid uint64) error {
-	if err := tx.Unscoped().Where("post_id = ?", postid).Delete(&model.Comment{}).Error; err != nil {
+	if err := tx.Where("post_id = ?", postid).Delete(&model.Comment{}).Error; err != nil {
 		return err
 	}
-	err := tx.Unscoped().Where("id = ?", postid).Delete(&model.Post{}).Error
+	if err := tx.Where("post_id = ?", postid).Delete(&model.PostDetails{}).Error; err != nil {
+		return err
+	}
+	err := tx.Where("id = ?", postid).Delete(&model.Post{}).Error
 	return err
 }
 
 func (r *Resolvers) DeletePost(ctx context.Context, args struct{ Pid string }) (*QueryResponse, error) {
-	profile, _ := r.GetMyProfile(ctx)
-
-	if profile.Status != 200 {
-		return &QueryResponse{Status: profile.Status, Msg: profile.Msg}, nil
-	}
-
 	post := model.Post{}
 	if r.DB.Where("id = ?", args.Pid).First(&post).RecordNotFound() {
 		msg := "Not Found. Are you trying something you are not meant to?"
 		return &QueryResponse{Status: 301, Msg: &msg}, nil
 	}
 
-	// To be removed: Believe the token
-	if post.UserID != profile.User.U.ID {
+	uid, err := handler.GetUid(ctx)
+	if post.UserID != uid || err != nil {
 		msg := "Not Authorized. Please do not poke into others work."
 		return &QueryResponse{Status: 308, Msg: &msg}, nil
 	}
@@ -201,7 +209,7 @@ func (r *Resolvers) DeletePost(ctx context.Context, args struct{ Pid string }) (
 	var postids []uint64
 	// List answers if question
 	if post.PostType == 0 {
-		r.DB.Where("ques_id = ?", post.ID).Find(&post).Pluck("id", &postids)
+		r.DB.Where("ques_id = ?", post.ID).Find(&model.PostDetails{}).Pluck("post_id", &postids)
 	}
 	// Add original post
 	postids = append(postids, post.ID)

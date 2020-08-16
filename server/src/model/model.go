@@ -30,7 +30,7 @@ type Comment struct {
 	Model
 	User   User `gorm:"foreignkey:UserID"`
 	UserID uint64
-	Body   string `gorm:"type:text";not null`
+	Body   string `gorm:"type:varchar(2048)";not null`
 	PostID uint64 `gorm:"index;not null"`
 }
 
@@ -40,15 +40,7 @@ type Post struct {
 	// Defining User
 	User   User `gorm:"foreignkey:UserID"`
 	UserID uint64
-	// Base Fields
-	Body  string `gorm:"type:text;not null"`
-	Vote  int32
-	Title string `gorm:"type:varchar(1024)"`
-	// Comments
-	Comments []*Comment `gorm:"foreignkey:PostID"`
-	// Question Reference
-	Answers []*Post `gorm:"foreignkey:QuesID"`
-	QuesID  uint64  `gorm:"index"`
+	Title  string `gorm:"type:varchar(300)"`
 	// Post Type
 	PostType int32 `gorm:"type:smallint;not null"`
 	// Tags
@@ -57,4 +49,27 @@ type Post struct {
 	Tag3 string `gorm:"type:varchar(50)"`
 	Tag4 string `gorm:"type:varchar(50)"`
 	Tag5 string `gorm:"type:varchar(50)"`
+}
+
+// Post Details Type
+type PostDetails struct {
+	Post   Post   `gorm:"foreignkey:PostID;not null"`
+	PostID uint64 `gorm:"primary_key;auto_increment:false"`
+	// Base Fields
+	Body string `gorm:"type:text;not null"`
+	Vote int32  `gorm:"type:smallint"`
+	// Comments
+	Comments []*Comment `gorm:"foreignkey:PostID"`
+	// Question Reference
+	Ansswers []*Post `gorm:"foreignkey:QuesID"`
+	QuesID   uint64  `gorm:"index"`
+}
+
+// View State Table
+type View struct {
+	Post   Post   `gorm:"foreignkey:PostID;not null"`
+	PostID uint64 `gorm:"primary_key;auto_increment:false"`
+	User   User   `gorm:"foreignkey:UserID"`
+	UserID uint64 `gorm:"primary_key;auto_increment:false"`
+	State  int32  `gorm:"type:smallint;not null"`
 }

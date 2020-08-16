@@ -4,6 +4,7 @@ import "model"
 import "context"
 import "strconv"
 import "fmt"
+import "handler"
 
 // Create Comment
 
@@ -52,19 +53,15 @@ type UpdateCommentArgs struct {
 
 
 func (r *Resolvers) UpdateComment(ctx context.Context, args UpdateCommentArgs) (*QueryResponse, error) {
-	profile, _ := r.GetMyProfile(ctx)
-
-	if profile.Status!=200 {
-		return &QueryResponse{Status: profile.Status, Msg: profile.Msg}, nil
-	}
-
 	comment := model.Comment{}
 	if r.DB.Where("id = ?", args.Cid).First(&comment).RecordNotFound() {
 		msg := "Not Found. Are you trying something you are not meant to?"
 		return &QueryResponse{Status: 301, Msg: &msg}, nil
 	}
 
-	if comment.UserID != profile.User.U.ID {
+	uid, err := handler.GetUid(ctx)
+
+	if comment.UserID != uid || err!=nil {
 		msg := "Not Authorized. Please do not poke into others work."
 		return &QueryResponse{Status: 308, Msg: &msg}, nil
 	}
@@ -81,25 +78,21 @@ func (r *Resolvers) UpdateComment(ctx context.Context, args UpdateCommentArgs) (
 
 // Currently Hard Delete
 func (r * Resolvers) DeleteComment(ctx context.Context, args struct{ Cid string}) (*QueryResponse, error) {
-	profile, _ := r.GetMyProfile(ctx)
-
-	if profile.Status!=200 {
-		return &QueryResponse{Status: profile.Status, Msg: profile.Msg}, nil
-	}
-
 	comment := model.Comment{}
 	if r.DB.Where("id = ?", args.Cid).First(&comment).RecordNotFound() {
 		msg := "Not Found. Are you trying something you are not meant to?"
 		return &QueryResponse{Status: 301, Msg: &msg}, nil
 	}
-	
-	if comment.UserID != profile.User.U.ID {
+
+	uid, err := handler.GetUid(ctx)
+
+	if comment.UserID != uid || err!=nil {
 		msg := "Not Authorized. Please do not poke into others work."
 		return &QueryResponse{Status: 308, Msg: &msg}, nil
 	}
 
 	// This is a hard delete
-	if err := r.DB.Unscoped().Delete(&comment).Error; err != nil {
+	if err := r.DB.Delete(&comment).Error; err != nil {
 		msg:= "Error while deleting"
 		return &QueryResponse{Status: 309, Msg: &msg}, nil
 	}
