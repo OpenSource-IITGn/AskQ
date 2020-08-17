@@ -34,7 +34,7 @@ function Answer(props) {
                 </FlexboxGrid>
             </Panel>
             <Panel className="comments-body" >
-                <CommentSection />
+                <CommentSection postId={id} />
             </Panel>
 
         </div>

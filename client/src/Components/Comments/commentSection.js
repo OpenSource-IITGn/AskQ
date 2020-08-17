@@ -2,11 +2,19 @@ import React, { useState, useContext } from 'react'
 import { List, FlexboxGrid, Button } from 'rsuite';
 import Comment from './comment'
 import { CommentsContext } from './../../Contexts/CommentsContext'
+import { useCreateCommentMutation } from './../../GraphQL/Mutations/commentMutation'
+import { useUserQuery } from './../../GraphQL/Queries/userQuery'
 import './../../styles/comments.css'
 
-function CommentSection() {
+function CommentSection(props) {
 
     const [showEditor, setShowEditor] = useState(false)
+    const [body, setBody] = useState('')
+    const [commentBody, setCommentBody] = useState('')
+    const [createCommentMutation, createCommentMutationResults] = useCreateCommentMutation();
+    const { postId } = props
+    const userData = useUserQuery();
+
     const context = useContext(CommentsContext)
 
     if (!context) {
@@ -15,29 +23,60 @@ function CommentSection() {
         )
     }
 
-
-    let commentsList, setCommentsList, updateCommentsList
-
-    commentsList = context.commentsList
-    setCommentsList = context.setCommentsList
-    updateCommentsList = context.updateCommentsList
+    const { commentsList, setCommentsList, updateCommentsList } = context
 
     const handleClick = () => {
         setShowEditor(currState => !currState)
     }
 
-    const allComments = commentsList.map((c) => <Comment commentDetails={c} />)
-    const handleSubmit = () => {
-
+    const handleCommentChange = (e) => {
+        setCommentBody(e.target.value)
     }
+
+
+    if (userData.loading) {
+        return (
+            <div>loading</div>
+        )
+    }
+    if (userData.error) {
+        return (
+            <div> Error : Userdata.error </div>
+        )
+    }
+
+
+    const { user } = userData.data.getMyProfile
+
+
+    const handleSubmit = async () => {
+        const mutation = await createCommentMutation(
+            postId,
+            commentBody,
+        )
+
+        const { data } = mutation
+
+        updateCommentsList({
+            id: "4",
+            body: commentBody,
+            user: {
+                id: user.id,
+                username: user.username
+            }
+        })
+    }
+
+    const allComments = commentsList.map((c) => <Comment commentDetails={c} />)
+
     const commentButton = showEditor ? (
         <div>
             <Button onClick={handleSubmit} >
                 Submit
-        </Button >
+            </Button >
             <Button onClick={handleClick} >
                 Cancel
-        </Button >
+            </Button >
         </div>
     ) :
         (<Button onClick={handleClick} >
@@ -51,10 +90,9 @@ function CommentSection() {
                 <List size="sm" hover>
                     <List.Item className="small-heading"><h6>Comments</h6></List.Item>
                     {allComments}
-                    {showEditor && <textarea />}
+                    {showEditor && <textarea name="comment" value={commentBody} onChange={handleCommentChange} />}
                 </List>
-
-
+                {commentButton}
             </FlexboxGrid.Item>
         </FlexboxGrid>
     )

@@ -3,15 +3,19 @@ import { List, FlexboxGrid } from 'rsuite'
 
 import './../../styles/comments.css'
 
-function Comment() {
+function Comment(props) {
+    const { commentDetails } = props
+    const { body, id, user } = commentDetails
+    const { username } = user
+
     return (
         <List.Item className="comment">
             <FlexboxGrid justify="space-between" className="full-width">
                 <FlexboxGrid.Item>
-                    Qui officia deserunt mollit Palpitoad Lugia Tympole Ivysaur Stunky Abomasnow. Water Joltik
+                    {body}
                 </FlexboxGrid.Item>
                 <FlexboxGrid.Item>
-                    asked 13 mins ago <a href="https://www.google.com">Greil Omatics</a>
+                    asked 13 mins ago <a href="https://www.google.com">{username}</a>
 
                 </FlexboxGrid.Item>
             </FlexboxGrid>
