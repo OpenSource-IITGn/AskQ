@@ -38,9 +38,7 @@ func (r *Resolvers) CreatePost(ctx context.Context, args CreatePostArgs) (*Query
 	// Set user
 	post := model.Post{}
 	postdet := model.PostDetails{}
-	postdet.Post = post
 	post.User = *(profile.User.U)
-	post.PostType = args.PostType
 
 	// Check if answer and validate Question ID
 	if args.PostType == 1 {
@@ -94,12 +92,16 @@ func (r *Resolvers) CreatePost(ctx context.Context, args CreatePostArgs) (*Query
 		}
 	}
 
-	postdet.Body = args.Body
+	post.PostType = args.PostType
 
 	if err := r.DB.Create(&post).Error; err != nil {
 		msg := "Error while creating post"
 		return &QueryResponse{Status: 305, Msg: &msg}, nil
 	}
+
+	postdet.Body = args.Body
+	postdet.Post = post
+
 	if err := r.DB.Create(&postdet).Error; err != nil {
 		msg := "Error while creating post"
 		return &QueryResponse{Status: 305, Msg: &msg}, nil
