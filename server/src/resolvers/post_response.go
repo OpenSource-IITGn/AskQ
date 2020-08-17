@@ -82,16 +82,12 @@ func (r *PostResponse) User() *UserResponse {
 
 // Answers for PostResponse
 func (r *PostResponse) Answers() []*PostResponse {
-	if r.pd == nil {
-		r.pd = getpostdet(r.p, r.res)
-	}
-
 	if r.p.PostType != 0 {
 		return nil
 	}
 
 	var posts []*model.Post
-	if err := r.res.DB.Model(r.pd).Related(&posts, "Answers").Error; err != nil {
+	if err := r.res.DB.Model(r.p).Related(&posts, "Answers").Error; err != nil {
 		return nil
 	}
 

@@ -54,7 +54,7 @@ func (r *Resolvers) CreatePost(ctx context.Context, args CreatePostArgs) (*Query
 			msg := "Invalid Id. Are you trying to panic me? :("
 			return &QueryResponse{Status: 302, Msg: &msg}, nil
 		} else {
-			postdet.QuesID = qid
+			post.QuesID = qid
 		}
 
 		// Get the question post

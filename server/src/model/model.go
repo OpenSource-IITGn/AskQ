@@ -49,6 +49,9 @@ type Post struct {
 	Tag3 string `gorm:"type:varchar(50)"`
 	Tag4 string `gorm:"type:varchar(50)"`
 	Tag5 string `gorm:"type:varchar(50)"`
+	// Question Reference
+	Answers []*Post `gorm:"foreignkey:QuesID"`
+	QuesID   uint64  `gorm:"index"`
 }
 
 // Post Details Type
@@ -60,9 +63,6 @@ type PostDetails struct {
 	Vote int32  `gorm:"type:smallint"`
 	// Comments
 	Comments []*Comment `gorm:"foreignkey:PostID"`
-	// Question Reference
-	Ansswers []*Post `gorm:"foreignkey:QuesID"`
-	QuesID   uint64  `gorm:"index"`
 }
 
 // View State Table
