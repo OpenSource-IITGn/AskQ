@@ -15,18 +15,19 @@ function QuestionDetail(props) {
     const postData = usePostDetailsQuery({ id: quesId })
 
     if (postData.loading) {
+        console.log(postData.loading)
         return (
             <div>loading</div>
         )
     }
     if (postData.error) {
+        console.log(postData.error)
         return (
             <div> Error : postData.error </div>
         )
     }
 
     const { ok, error, post } = postData.data.getPostDetailsByID
-    console.log(post)
 
     return (
         <Container className="full-height">
@@ -36,7 +37,7 @@ function QuestionDetail(props) {
             <Content className="horizontal-margin top-margin">
                 <FlexboxGrid justify="center" className="">
                     <FlexboxGrid.Item colspan={14}>
-                        <AnswersProvider>
+                        <AnswersProvider initialState={post.answers}>
                             <QuestionDetails {...props} post={post} />
                         </AnswersProvider>
                     </FlexboxGrid.Item>

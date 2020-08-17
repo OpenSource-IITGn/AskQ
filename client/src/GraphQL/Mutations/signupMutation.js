@@ -29,7 +29,6 @@ export const useSignupMutation = () => {
     const signUp = async (userName, email, password) => {
 
         await removeAuthtoken();
-        console.log("userName", userName)
         return mutation({
             variables: {
                 userName: userName,

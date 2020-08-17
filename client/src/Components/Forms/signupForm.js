@@ -15,7 +15,6 @@ const SignupForm = (props, { loading }) => {
 
 
   const handleSubmit = async () => {
-    console.log(username, email, password)
     await signupMutation(username, email, password)
     props.history.push('/login')
   }

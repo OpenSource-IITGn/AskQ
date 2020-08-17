@@ -1,15 +1,15 @@
 package resolvers
 
 import (
-	"model"
 	"fmt"
+	"model"
 )
 
 // PostResponse is the post response type
 type PostResponse struct {
-	p *model.Post
+	p   *model.Post
 	res *Resolvers
-	pd 	*model.PostDetails
+	pd  *model.PostDetails
 }
 
 // Get PostDetails
@@ -91,13 +91,15 @@ func (r *PostResponse) Answers() []*PostResponse {
 	}
 
 	var posts []*model.Post
-	if err:= r.res.DB.Model(r.pd).Related(&posts, "Answers").Error; err != nil {
+	if err := r.res.DB.Model(r.pd).Related(&posts, "Answers").Error; err != nil {
 		return nil
 	}
 
 	var ans []*PostResponse
 	for _, v := range posts {
-		ans = append(ans, &PostResponse{p: v, res: r.res})
+		if v.PostType == 1 {
+			ans = append(ans, &PostResponse{p: v, res: r.res})
+		}
 	}
 
 	return ans
@@ -110,7 +112,7 @@ func (r *PostResponse) Comments() []*CommentResponse {
 	}
 
 	var coms []*model.Comment
-	if err:= r.res.DB.Model(r.pd).Related(&coms, "Comments").Error; err != nil {
+	if err := r.res.DB.Model(r.pd).Related(&coms, "Comments").Error; err != nil {
 		return nil
 	}
 

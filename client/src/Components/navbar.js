@@ -10,8 +10,6 @@ function CustomNavbar(props) {
     const logout = useLogout()
 
     const handleLogout = async () => {
-        console.log(typeof (logout))
-        console.log(logout)
 
         await logout();
         alert('Successfuly Logged out')
