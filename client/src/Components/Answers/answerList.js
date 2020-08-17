@@ -3,12 +3,18 @@ import { FlexboxGrid } from 'rsuite'
 import Answer from './answer'
 import AddAnswerForm from '../Forms/addAnswerForm'
 import { AnswersContext } from './../../Contexts/AnswersContext'
+import { CommentsProvider } from '../../Contexts/CommentsContext'
 
 
 function AnswerList(props) {
 
     const [answersList, setAnswersList, updateAnswerList] = useContext(AnswersContext)
-    const answerBlocks = answersList.map((a) => (<Answer answerDetails={a} />))
+    console.log(answersList)
+    const answerBlocks = answersList.map((a) => (
+        <CommentsProvider comments={a.comments}>
+            <Answer answerDetails={a} />
+        </CommentsProvider>
+    ))
 
     const handleAnswerSubmit = (newAnswer) => {
         updateAnswerList(newAnswer)

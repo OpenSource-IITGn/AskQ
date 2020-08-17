@@ -11,6 +11,24 @@ export const CREATE_POST = gql`
   }
 `;
 
+export const UPDATE_POST = gql`
+mutation updatePost($pid: String!, $title: String, $body: String, $tags: Tags!){
+    updatePost(pid: $pid, title: $title, body: $body, tags: $tags) {
+        ok
+        error
+    }
+}
+`
+
+export const DELETE_POST = gql`
+mutation deletePost($pid: String!){
+    updatePost(pid: $pid) {
+        ok
+        error
+    }
+}
+`
+
 
 export const useCreatePostMutation = () => {
     // const [_, setAuthToken, removeAuthtoken] = useAuthToken();
