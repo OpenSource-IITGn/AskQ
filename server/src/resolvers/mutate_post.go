@@ -37,6 +37,7 @@ func (r *Resolvers) CreatePost(ctx context.Context ,args CreatePostArgs) (*Query
 	postdet := model.PostDetails{}
 	postdet.Post = post
 	post.User = *(profile.User.U)
+	post.PostType = args.PostType
 	
 	// Check if answer and validate Question ID
 	if args.PostType==1 {
