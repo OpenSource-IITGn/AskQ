@@ -8,7 +8,7 @@ import './../../styles/comments.css'
 
 function CommentSection(props) {
 
-    const [showEditor, setShowEditor] = useState(true)
+    const [showEditor, setShowEditor] = useState(false)
     const [body, setBody] = useState('')
     const [commentBody, setCommentBody] = useState('')
     const [createCommentMutation, createCommentMutationResults] = useCreateCommentMutation();
