@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { List, FlexboxGrid, Button } from 'rsuite';
+import { List, FlexboxGrid, Button, Input } from 'rsuite';
 import Comment from './comment'
 import { CommentsContext } from './../../Contexts/CommentsContext'
 import { useCreateCommentMutation } from './../../GraphQL/Mutations/commentMutation'
@@ -8,7 +8,7 @@ import './../../styles/comments.css'
 
 function CommentSection(props) {
 
-    const [showEditor, setShowEditor] = useState(false)
+    const [showEditor, setShowEditor] = useState(true)
     const [body, setBody] = useState('')
     const [commentBody, setCommentBody] = useState('')
     const [createCommentMutation, createCommentMutationResults] = useCreateCommentMutation();
@@ -29,8 +29,8 @@ function CommentSection(props) {
         setShowEditor(currState => !currState)
     }
 
-    const handleCommentChange = (e) => {
-        setCommentBody(e.target.value)
+    const handleCommentChange = (val, e) => {
+        setCommentBody(val)
     }
 
 
@@ -65,6 +65,8 @@ function CommentSection(props) {
                 username: user.username
             }
         })
+        setCommentBody('')
+        setShowEditor(false)
     }
 
     const allComments = commentsList.map((c) => <Comment commentDetails={c} />)
@@ -84,13 +86,17 @@ function CommentSection(props) {
         </Button >
         )
 
+    const commentInputTextarea = (
+        <Input componentClass="textarea" rows={3} placeholder="Write your comment..." name="comment" componentClass="textarea" value={commentBody} onChange={handleCommentChange} />
+    )
+
     return (
         <FlexboxGrid justify="end" className="comment-section">
             <FlexboxGrid.Item colspan={24}>
                 <List size="sm" hover>
                     <List.Item className="small-heading"><h6>Comments</h6></List.Item>
                     {allComments}
-                    {showEditor && <textarea name="comment" value={commentBody} onChange={handleCommentChange} />}
+                    {showEditor && commentInputTextarea}
                 </List>
                 {commentButton}
             </FlexboxGrid.Item>
