@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { List, FlexboxGrid, Button, Input } from 'rsuite';
+import { List, FlexboxGrid, Button, Input, Alert } from 'rsuite';
 import Comment from './comment'
 import { CommentsContext } from './../../Contexts/CommentsContext'
 import { useCreateCommentMutation } from './../../GraphQL/Mutations/commentMutation'
@@ -50,24 +50,35 @@ function CommentSection(props) {
 
 
     const handleSubmit = async () => {
-        const mutation = await createCommentMutation(
-            postId,
-            commentBody,
-        )
+        try {
+            const mutation = await createCommentMutation(
+                postId,
+                commentBody,
+            )
 
-        const { data } = mutation
+            const { data } = mutation
 
-        updateCommentsList({
-            id: "4",
-            body: commentBody,
-            user: {
-                id: user.id,
-                username: user.username
-            }
-        })
-        setCommentBody('')
-        setShowEditor(false)
+            const commentId = data.createComment.error
+
+            updateCommentsList({
+                id: commentId,
+                body: commentBody,
+                user: {
+                    id: user.id,
+                    username: user.username
+                }
+            })
+
+            setCommentBody('')
+            setShowEditor(false)
+
+        } catch (error) {
+            Alert.error('Failed to add comment')
+            setCommentBody('')
+            setShowEditor(false)
+        }
     }
+
 
     const allComments = commentsList.map((c) => <Comment commentDetails={c} />)
 
