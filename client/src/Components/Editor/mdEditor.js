@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { convertToRaw } from 'draft-js';
+import { convertToRaw, ContentState, EditorState, convertFromHTML, createFromBlockArray } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
-// import htmlToDraft from 'html-to-draftjs';
-
 
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
@@ -24,12 +22,27 @@ class MdEditor extends Component {
         this.props.handleChange(value);
     }
 
+
     render() {
+        let initialContentState
+        if (this.props.initialValue) {
+            let initialValue = this.props.initialValue
+            const blocksFromHTML = convertFromHTML(initialValue);
+            initialContentState = ContentState.createFromBlockArray(
+                blocksFromHTML.contentBlocks,
+                blocksFromHTML.entityMap,
+            );
+
+        } else {
+            initialContentState = ContentState.createFromText('')
+        }
+        const editorValue = EditorState.createWithContent(initialContentState);
         return (
             <div>
                 <Editor
                     wrapperClassName="wrapper"
                     editorClassName="editor"
+                    defaultEditorState={editorValue}
                     onEditorStateChange={this.onEditorStateChange}
                     placeholder={this.props.placeHolder}
                     onChange={this.handleChange}

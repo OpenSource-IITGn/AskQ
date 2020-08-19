@@ -8,6 +8,7 @@ import Signup from './../Pages/signup';
 import Questions from './../Pages/questions';
 import QuestionDetail from './../Pages/questionDetail';
 import CreateQuestion from './../Pages/createQuestion';
+import QuestionEdit from '../Pages/questionEdit';
 
 export default class Routes extends Component {
     render() {
@@ -22,6 +23,7 @@ export default class Routes extends Component {
                 <Route exact path="/questions" render={(routeProps) => <Questions {...routeProps} />} />
                 <ProtectedRoute exact path="/questions/create" component={CreateQuestion} />
                 <Route exact path="/questions/:id" render={(routeProps) => <QuestionDetail {...routeProps} />} />
+                <Route exact path="/questions/:id/edit" render={(routeProps) => <QuestionEdit {...routeProps} />} />
 
                 {/* <ProtectedRoute exact path="/secret" component={Secret} /> */}
             </Switch>

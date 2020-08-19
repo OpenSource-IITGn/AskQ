@@ -1,7 +1,9 @@
 import React from 'react'
 import { FlexboxGrid, Button, Divider, Panel, Tag, TagGroup, ButtonGroup, ButtonToolbar, Icon } from 'rsuite'
+import { Link } from 'react-router-dom'
 
 import "./../../styles/questions.css"
+import { from } from 'apollo-link'
 
 
 function Question(props) {
@@ -9,14 +11,41 @@ function Question(props) {
     const handleClick = () => {
         // alert('clicked on question')
     }
-    const { showDetailed, title, body, timeSinceCreation, tags, vote, numAnswers, userName, userId } = props;
+    const { id, showDetailed, title, body, timeSinceCreation, tags, vote, numAnswers, userName, userId } = props;
+
+    const editData = {
+        title,
+        body,
+        tags
+    }
+
     return (
         <div >
             <Panel onClick={handleClick} className="question-row">
-                <TagGroup>
-                    <Tag >Javascript</Tag>
-                    <Tag >jQuery</Tag>
-                </TagGroup>
+                <FlexboxGrid justify="space-between">
+                    <FlexboxGrid.Item>
+                        <TagGroup>
+                            <Tag >Javascript</Tag>
+                            <Tag >jQuery</Tag>
+                        </TagGroup>
+                    </FlexboxGrid.Item>
+                    <FlexboxGrid.Item>
+                        <ButtonGroup>
+                            <Button>
+                                <Link to={{
+                                    pathname: `${id}/edit`,
+                                    data: editData,
+                                }}>Edit</Link>
+                            </Button>
+                            <Button>
+                                <Link to={{
+                                    pathname: `${id}/delete`
+                                }}>Delete</Link>
+                            </Button>
+                        </ButtonGroup>
+                    </FlexboxGrid.Item>
+                </FlexboxGrid>
+
                 <br />
                 <div className="question-body">
                     <div>

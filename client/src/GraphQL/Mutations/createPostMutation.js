@@ -65,3 +65,41 @@ export const useCreatePostMutation = () => {
     }
     return [createPost, mutationResults]
 };
+
+
+export const useUpdatePostMutation = () => {
+    // const [_, setAuthToken, removeAuthtoken] = useAuthToken();
+    const [mutation, mutationResults] = useMutation(UPDATE_POST, {
+        //if the mutation succeed, we save the token for later
+        onCompleted: (data) => {
+            console.log("updated")
+            console.log(data)
+        },
+    });
+
+    //we have rewritten the function to have a cleaner interface
+    const updatePost = async (pid, title, body, tags) => {
+        let tagsList = null
+        if (tags) {
+            const [tag1, tag2, tag3, tag4, tag5] = tags.split(",")
+            tagsList = {
+                tag1: tag1,
+                tag2: tag2,
+                tag3: tag3,
+                tag4: tag4,
+                tag5: tag5,
+            }
+        }
+        return mutation({
+            variables: {
+                pid: pid,
+                title: title,
+                body: body,
+                tags: tagsList
+            }
+        })
+
+    }
+    return [updatePost, mutationResults]
+};
+

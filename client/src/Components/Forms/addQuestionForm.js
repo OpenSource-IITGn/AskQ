@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Form, FormGroup, ControlLabel, HelpBlock, ButtonToolbar, Button, FormControl, Panel, FlexboxGrid } from 'rsuite'
-import { useCreatePostMutation } from '../../GraphQL/Mutations/createPostMutation';
+import { useCreatePostMutation, useUpdatePostMutation } from '../../GraphQL/Mutations/createPostMutation';
 
 import MdEditor from '../Editor/mdEditor'
 import './../../styles/global.css'
@@ -9,22 +9,50 @@ import './../../styles/global.css'
 function AddQuestionForm(props) {
 
     const [createPostMutation, createPostMutationResults] = useCreatePostMutation();
+    const [updatePostMutation, updatePostMutationResults] = useUpdatePostMutation();
+
+    const { isEditing, postData, postId } = props
 
     const postType = 0
     const quesid = null
 
-    const [title, setTitle] = useState('')
-    const [body, setBody] = useState('')
-    const [tags, setTags] = useState('')
+    var [title_var, body_var, tags_var] = ['', '', '']
+
+    if (isEditing) {
+        const [title_, body_, tags_] = [postData.title, postData.body, postData.tags]
+        var tagsString = ''
+        tags_.forEach(e => {
+            if (e.length !== 0) {
+                tagsString += e + ','
+            }
+        });
+        title_var = title_
+        body_var = body_
+        tags_var = tagsString
+    }
+
+
+    const [title, setTitle] = useState(title_var)
+    const [body, setBody] = useState(body_var)
+    const [tags, setTags] = useState(tags_var)
+
 
     const handleSubmit = async () => {
-        await createPostMutation(
-            postType,
-            quesid,
-            title,
-            body,
-            tags
-        )
+        const pid = postId
+
+        isEditing ?
+            await updatePostMutation(
+                pid,
+                title,
+                body,
+                tags
+            ) : await createPostMutation(
+                postType,
+                quesid,
+                title,
+                body,
+                tags
+            )
 
         props.history.push('/questions')
     }
@@ -50,7 +78,7 @@ function AddQuestionForm(props) {
             </FormGroup>
             <FormGroup>
                 <ControlLabel>Body</ControlLabel>
-                <MdEditor handleChange={handleBodyChange} type="question" placeHolder="Write body of Question here..." />
+                <MdEditor initialValue={body} handleChange={handleBodyChange} type="question" placeHolder="Write body of Question here..." />
             </FormGroup>
 
             <FormGroup>
@@ -60,7 +88,9 @@ function AddQuestionForm(props) {
             </FormGroup>
             <FormGroup>
                 <ButtonToolbar>
-                    <Button type="submit" appearance="primary">Post Question</Button>
+                    <Button type="submit" appearance="primary">
+                        {isEditing ? 'Update Question' : 'Post Question'}
+                    </Button>
                 </ButtonToolbar>
             </FormGroup>
         </Form>

@@ -17,7 +17,7 @@ function QuestionDetails(props) {
 
     return (
         <div>
-            <Question showDetailed={true} title={title} body={body} timeSinceCreation={timeSinceCreation} tags={tags} vote={vote} numAnswers={numAnswers} userName={user.name} userId={user.id} />
+            <Question id={id} showDetailed={true} title={title} body={body} timeSinceCreation={timeSinceCreation} tags={tags} vote={vote} numAnswers={numAnswers} userName={user.name} userId={user.id} />
             <Panel className="comments-body" >
                 <CommentsProvider comments={comments}>
                     <CommentSection postId={id} />

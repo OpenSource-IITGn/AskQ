@@ -4,6 +4,9 @@ import CustomNavbar from './../Components/navbar'
 import AddQuestionForm from './../Components/Forms/addQuestionForm'
 
 function CreateQuestion(props) {
+    const { isEditing } = props
+    const formheader = isEditing ? (<h3> Edit Question</h3>) : (<h3>Add Question</h3>)
+
     return (
         <Container className="full-height">
             <Header>
@@ -12,7 +15,7 @@ function CreateQuestion(props) {
             <Content className="centered-container full-width">
                 <FlexboxGrid justify="center" className="full-width">
                     <FlexboxGrid.Item colspan={16}>
-                        <Panel header={<h3>Add Question</h3>} className="auth-card" shaded>
+                        <Panel header={formheader} className="auth-card" shaded>
                             <AddQuestionForm {...props} />
                         </Panel>
                     </FlexboxGrid.Item>
