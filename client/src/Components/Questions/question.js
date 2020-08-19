@@ -49,7 +49,7 @@ function Question(props) {
                 <br />
                 <div className="question-body">
                     <div>
-                        <h4 class="question-title">{title}</h4>
+                        <h4 className="question-title">{title}</h4>
                     </div>
                     <br />
                     <div className="">

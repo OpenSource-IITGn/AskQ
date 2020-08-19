@@ -80,7 +80,7 @@ function CommentSection(props) {
     }
 
 
-    const allComments = commentsList.map((c) => <Comment commentDetails={c} />)
+    const allComments = commentsList.map((c, index) => <Comment key={index} commentDetails={c} />)
 
     const commentButton = showEditor ? (
         <div>

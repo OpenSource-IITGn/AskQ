@@ -14,9 +14,9 @@ function Home(props) {
                 <div className="centered-container">
                     <h2>Go - Over - flow</h2>
                     <ButtonToolbar className="auth-buttons">
-                        <Link to="/signup"><Button appearance="default">Sign Up</Button></Link>
-                        <Link to="/login"><Button appearance="primary">Login</Button></Link>
-                        <Link to="/questions"><Button appearance="ghost">Questions</Button></Link>
+                        <Button componentClass={Link} to="/signup" appearance="default">Sign Up</Button>
+                        <Button componentClass={Link} to="/login" appearance="primary">Login</Button>
+                        <Button componentClass={Link} to="/questions" appearance="ghost">Questions</Button>
                     </ButtonToolbar>
                 </div>
 

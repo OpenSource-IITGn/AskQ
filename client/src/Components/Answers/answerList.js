@@ -9,9 +9,8 @@ import { CommentsProvider } from '../../Contexts/CommentsContext'
 function AnswerList(props) {
 
     const [answersList, setAnswersList, updateAnswerList] = useContext(AnswersContext)
-    console.log(answersList)
-    const answerBlocks = answersList.map((a) => (
-        <CommentsProvider comments={a.comments}>
+    const answerBlocks = answersList.map((a, index) => (
+        <CommentsProvider comments={a.comments} key={index} >
             <Answer answerDetails={a} />
         </CommentsProvider>
     ))

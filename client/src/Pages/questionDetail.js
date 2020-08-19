@@ -15,13 +15,11 @@ function QuestionDetail(props) {
     const postData = usePostDetailsQuery({ id: quesId })
 
     if (postData.loading) {
-        console.log(postData.loading)
         return (
             <div>loading</div>
         )
     }
     if (postData.error) {
-        console.log(postData.error)
         return (
             <div> Error : postData.error </div>
         )

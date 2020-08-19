@@ -72,7 +72,6 @@ export const useUpdatePostMutation = () => {
     const [mutation, mutationResults] = useMutation(UPDATE_POST, {
         //if the mutation succeed, we save the token for later
         onCompleted: (data) => {
-            console.log("updated")
             console.log(data)
         },
     });

@@ -15,7 +15,7 @@ function Questions(props) {
 
     const header =
         (<FlexboxGrid justify="space-between" colspan={14}>
-            <FlexboxGrid.Item><h2 class="container-heading">Top Questions</h2></FlexboxGrid.Item>
+            <FlexboxGrid.Item><h2 className="container-heading">Top Questions</h2></FlexboxGrid.Item>
             <FlexboxGrid.Item>
                 <Button appearance="primary" onClick={handleClick}>Ask Question</Button>
             </FlexboxGrid.Item>
