@@ -1,20 +1,31 @@
-import React, { useState } from 'react'
-import { Form, FormGroup, FormControl, ControlLabel, HelpBlock, Button, ButtonToolbar } from 'rsuite';
+import React, { useState, useContext } from 'react'
+import { Form, FormGroup, FormControl, ControlLabel, HelpBlock, Button, ButtonToolbar, Alert } from 'rsuite';
 import './../../styles/global.css';
 
 import { useLoginMutation } from '../../GraphQL/Mutations/loginMutation';
+import { UserContext } from '../../Contexts/UserContext';
 
 const LoginForm = (props, { loading }) => {
-    const [loginMutation, loginMutationResults] = useLoginMutation();
 
-    // const onSubmit = (values) => loginMutation(values.username, values.password);
+    const [loginMutation, loginMutationResults] = useLoginMutation();
+    const { authenticated, setauthenticated, user, setUser } = useContext(UserContext);
     const [email, setEmail] = useState('azleblade@gmail.com');
     const [password, setPassword] = useState('azleblade');
 
 
     const handleSubmit = async () => {
-        await loginMutation(email, password)
-        props.history.push('/questions')
+        const data = await loginMutation(email, password)
+        console.log(data)
+        const signIndata = data.data.signIn
+
+        if (signIndata.ok) {
+            setauthenticated(true)
+            Alert.success('Login success')
+            props.history.push('/questions')
+        } else {
+            Alert.error(signIndata.error)
+            props.history.push('/login')
+        }
     }
 
     const handleChange = (value, evt) => {

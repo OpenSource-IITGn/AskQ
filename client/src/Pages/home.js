@@ -19,7 +19,6 @@ function Home(props) {
                         <Button componentClass={Link} to="/questions" appearance="ghost">Questions</Button>
                     </ButtonToolbar>
                 </div>
-
             </div>
 
         </div>

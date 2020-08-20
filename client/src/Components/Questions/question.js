@@ -1,22 +1,28 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { FlexboxGrid, Button, Divider, Panel, Tag, TagGroup, ButtonGroup, ButtonToolbar, Icon } from 'rsuite'
 import { Link } from 'react-router-dom'
+import { useAuthorized } from '../../hooks/authorized'
+import { UserContext } from '../../Contexts/UserContext'
+
 
 import "./../../styles/questions.css"
-import { from } from 'apollo-link'
 
 
 function Question(props) {
-
-    const handleClick = () => {
-        // alert('clicked on question')
-    }
     const { id, showDetailed, title, body, timeSinceCreation, tags, vote, numAnswers, userName, userId } = props;
+    const { authenticated, setauthenticated, user, setUser } = useContext(UserContext)
+    const [isAuthorized] = useAuthorized()
+    var hasAuthorization = false
+    hasAuthorization = isAuthorized(user.id, userId)
 
     const editData = {
         title,
         body,
         tags
+    }
+
+    const handleClick = () => {
+        // alert('clicked on question')
     }
 
     return (
@@ -30,7 +36,7 @@ function Question(props) {
                         </TagGroup>
                     </FlexboxGrid.Item>
                     <FlexboxGrid.Item>
-                        <ButtonGroup>
+                        {showDetailed && hasAuthorization && (<ButtonGroup>
                             <Button>
                                 <Link to={{
                                     pathname: `${id}/edit`,
@@ -42,7 +48,7 @@ function Question(props) {
                                     pathname: `${id}/delete`
                                 }}>Delete</Link>
                             </Button>
-                        </ButtonGroup>
+                        </ButtonGroup>)}
                     </FlexboxGrid.Item>
                 </FlexboxGrid>
 

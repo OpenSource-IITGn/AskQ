@@ -1,14 +1,62 @@
-import React, { CreateContext } from 'react';
+import React, { useEffect, useState, createContext } from 'react';
+import { useUserQuery } from '../GraphQL/Queries/userQuery';
+import { useAuthToken } from '../hooks/auth';
 
-export const UserContext = CreateContext(null)
+export const UserContext = createContext();
 
 export const UserProvider = (props) => {
+    const prevAuth = window.localStorage.getItem('authenticated') || false;
+    const prevAuthBody = JSON.parse(window.localStorage.getItem('authBody')) || {
+        id: '',
+        username: '',
+        email: ''
+    };
 
-    // const user = ;
+    if (typeof (prevAuth) == String) {
+        prevAuth = (prevAuth == 'true')
+    }
+
+    const [authenticated, setauthenticated] = useState(prevAuth);
+    const [user, setUser] = useState(prevAuthBody);
+
+    let [authToken] = useAuthToken();
+    const userData = useUserQuery();
+
+    useEffect(() => {
+        fetchUser()
+    }, [authenticated])
+
+    const fetchUser = () => {
+        if (userData.loading) return 'Loading...';
+        if (userData.error) return `Error! ${userData.error.message}`;
+
+        if (authToken === "null") {
+            authToken = null
+        }
+
+        let isAuthenticated = false
+        const isUser = userData.data.getMyProfile.ok
+        const userProfile = userData.data.getMyProfile.user
+
+        if (isUser && authToken) {
+            isAuthenticated = true
+            // setauthenticated(isAuthenticated)
+            const authBody = {
+                id: userProfile.id,
+                username: userProfile.username,
+                email: userProfile.email
+            }
+
+            setUser(authBody)
+            window.localStorage.setItem('authenticated', authenticated.toString());
+            window.localStorage.setItem('authBody', JSON.stringify(authBody));
+        }
+
+    }
 
     return (
-        <UserContext.Provider>
+        <UserContext.Provider value={{ authenticated, setauthenticated, user, setUser }}>
             {props.children}
         </UserContext.Provider>
     )
-}
+};
