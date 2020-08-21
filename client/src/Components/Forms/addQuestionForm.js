@@ -4,6 +4,7 @@ import { useCreatePostMutation, useUpdatePostMutation } from '../../GraphQL/Muta
 
 import MdEditor from '../Editor/mdEditor'
 import './../../styles/global.css'
+import { unknownError } from '../errorHandler';
 
 
 function AddQuestionForm(props) {
@@ -38,23 +39,35 @@ function AddQuestionForm(props) {
 
 
     const handleSubmit = async () => {
-        const pid = postId
 
-        isEditing ?
-            await updatePostMutation(
-                pid,
-                title,
-                body,
-                tags
-            ) : await createPostMutation(
-                postType,
-                quesid,
-                title,
-                body,
-                tags
-            )
-
-        props.history.push('/questions')
+        try {
+            const pid = postId
+            const response = isEditing ?
+                await updatePostMutation(
+                    pid,
+                    title,
+                    body,
+                    tags
+                ) : await createPostMutation(
+                    postType,
+                    quesid,
+                    title,
+                    body,
+                    tags
+                )
+            console.log(response.createPost)
+            if (response.createPost.ok === 202) {
+                return (
+                    <div>
+                        response.createPost.error
+                    </div>
+                )
+            }
+            props.history.push('/questions')
+        }
+        catch (e) {
+            unknownError('Failed to add Question - Try again')
+        }
     }
 
     const handleChange = (value, evt) => {

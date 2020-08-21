@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import { Panel, FlexboxGrid, Button, Form } from 'rsuite'
+import { Panel, FlexboxGrid, Button, Form, Alert } from 'rsuite'
 import { useCreatePostMutation } from './../../GraphQL/Mutations/createPostMutation'
 
 import MdEditor from '../Editor/mdEditor';
 import './../../styles/global.css'
 import { useUserQuery } from '../../GraphQL/Queries/userQuery';
+import { useHistory } from 'react-router-dom';
+import { unAuthorizedError, unknownError } from './../errorHandler'
 
 function AddAnswerForm(props) {
     const questionId = props.match.params.id
+    const history = useHistory();
 
     const [createPostMutation, createPostMutationResults] = useCreatePostMutation();
 
@@ -35,34 +38,42 @@ function AddAnswerForm(props) {
     const { user } = userData.data.getMyProfile
 
     const handleSubmit = async () => {
-        const mutation = await createPostMutation(
-            postType,
-            quesid,
-            title,
-            body,
-            tags
-        )
+        try {
+            const mutation = await createPostMutation(
+                postType,
+                quesid,
+                title,
+                body,
+                tags
+            )
 
-        // another lame hack
-        // console.log(createPostMutationResults)
-        const { data } = mutation
-        const ansId = data.createPost.error
-        setBody("")
+            const { data } = mutation
+            const response = data.createPost
 
-        props.onAnswerSubmit(
-            {
-                body: body,
-                comments: [],
-                createdAt: "0 mins",
-                updatedAt: "0 mins",
-                id: ansId,
-                user: {
-                    id: user.id,
-                    username: user.username
-                },
-                vote: 0
+            if (response.ok === 202) {
+                unAuthorizedError(response.error, history)
+            } else {
+                const ansId = data.createPost.error
+                setBody("")
+                props.onAnswerSubmit(
+                    {
+                        body: body,
+                        comments: [],
+                        createdAt: "0 mins",
+                        updatedAt: "0 mins",
+                        id: ansId,
+                        user: {
+                            id: user.id,
+                            username: user.username
+                        },
+                        vote: 0
+                    }
+                )
             }
-        )
+        } catch (e) {
+            unknownError('Failed to add Answer')
+        }
+
     }
 
 

@@ -5,10 +5,13 @@ import { CommentsContext } from './../../Contexts/CommentsContext'
 import { useCreateCommentMutation } from './../../GraphQL/Mutations/commentMutation'
 import { useUserQuery } from './../../GraphQL/Queries/userQuery'
 import './../../styles/comments.css'
+import { unAuthorizedError, unknownError } from '../errorHandler';
+import { useHistory } from 'react-router-dom';
 
 function CommentSection(props) {
 
     const [showEditor, setShowEditor] = useState(false)
+    const history = useHistory()
     const [body, setBody] = useState('')
     const [commentBody, setCommentBody] = useState('')
     const [createCommentMutation, createCommentMutationResults] = useCreateCommentMutation();
@@ -57,26 +60,29 @@ function CommentSection(props) {
             )
 
             const { data } = mutation
+            const response = data.createComment
 
-            const commentId = data.createComment.error
+            if (response.ok === 202) {
+                unAuthorizedError(response.error, history)
+            } else {
+                const commentId = response.error
+                updateCommentsList({
+                    id: commentId,
+                    body: commentBody,
+                    user: {
+                        id: user.id,
+                        username: user.username
+                    }
+                })
 
-            updateCommentsList({
-                id: commentId,
-                body: commentBody,
-                user: {
-                    id: user.id,
-                    username: user.username
-                }
-            })
-
-            setCommentBody('')
-            setShowEditor(false)
-
+            }
         } catch (error) {
-            Alert.error('Failed to add comment')
-            setCommentBody('')
-            setShowEditor(false)
+            unknownError('Failed to add comment')
         }
+
+        setCommentBody('')
+        setShowEditor(false)
+
     }
 
 
