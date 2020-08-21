@@ -8,3 +8,11 @@ export const unAuthorizedError = (error, history) => {
 export const unknownError = (error) => {
     Alert.error(`Unknown Error: ${error}`)
 }
+
+export const invalidError = (error) => {
+    Alert.error(`Invalide Data: ${error}`)
+}
+
+export const alreadySignedError = () => {
+    Alert.info(`Already Signed up with this email Id.`)
+}
