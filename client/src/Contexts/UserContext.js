@@ -1,6 +1,7 @@
 import React, { useEffect, useState, createContext } from 'react';
 import { useUserQuery } from '../GraphQL/Queries/userQuery';
 import { useAuthToken } from '../hooks/auth';
+import { unknownError } from '../Components/errorHandler';
 
 export const UserContext = createContext();
 
@@ -35,12 +36,21 @@ export const UserProvider = (props) => {
         }
 
         let isAuthenticated = false
-        const isUser = userData.data.getMyProfile.ok
-        const userProfile = userData.data.getMyProfile.user
+        const response = userData.data.getMyProfile
+        console.log(response)
+        const isUser = (response.ok === 200)
+
+        if (!user) {
+            unknownError('Validate Credentials or Try again')
+            return;
+        }
+
+        const userProfile = response.user
+        console.log(userProfile)
 
         if (isUser && authToken) {
             isAuthenticated = true
-            // setauthenticated(isAuthenticated)
+
             const authBody = {
                 id: userProfile.id,
                 username: userProfile.username,

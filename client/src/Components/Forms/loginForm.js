@@ -4,7 +4,7 @@ import './../../styles/global.css';
 
 import { useLoginMutation } from '../../GraphQL/Mutations/loginMutation';
 import { UserContext } from '../../Contexts/UserContext';
-import { sucessAlert, loginError } from '../errorHandler';
+import { sucessAlert, loginError, unknownError } from '../errorHandler';
 
 const LoginForm = (props, { loading }) => {
 
@@ -15,17 +15,21 @@ const LoginForm = (props, { loading }) => {
 
 
     const handleSubmit = async () => {
-        const data = await loginMutation(email, password)
-        console.log(data)
-        const signIndata = data.data.signIn
+        try {
+            const data = await loginMutation(email, password)
+            const signIndata = data.data.signIn
 
-        if (signIndata.ok) {
-            setauthenticated(true)
-            sucessAlert('Login success')
-            props.history.push('/questions')
-        } else {
-            loginError()
-            props.history.push('/login')
+            if (signIndata.ok) {
+                setauthenticated(true)
+                sucessAlert('Login success')
+                props.history.push('/questions')
+            } else {
+                loginError()
+                props.history.push('/login')
+            }
+
+        } catch (e) {
+            unknownError('Network or server Error')
         }
     }
 

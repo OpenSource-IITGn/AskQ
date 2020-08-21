@@ -4,7 +4,7 @@ import { useSignupMutation } from '../../GraphQL/Mutations/signupMutation'
 
 import '../../styles/global.css';
 import { TextField, model } from '../formValidation';
-import { invalidError, alreadySignedError } from '../errorHandler';
+import { invalidError, alreadySignedError, unknownError } from '../errorHandler';
 
 
 const SignupForm = (props, { loading }) => {
@@ -25,12 +25,17 @@ const SignupForm = (props, { loading }) => {
       invalidError(formError.name)
       return;
     }
-    const data = await signupMutation(username, email, password)
-    const response = data.data.signUp
+    try {
+      const data = await signupMutation(username, email, password)
+      const response = data.data.signUp
 
-    if (response.ok === 104) {
-      alreadySignedError()
-      props.history.push('/login')
+      if (response.ok === 104) {
+        alreadySignedError()
+        props.history.push('/login')
+      }
+
+    } catch (e) {
+      unknownError('Network or server Error')
     }
 
   }
