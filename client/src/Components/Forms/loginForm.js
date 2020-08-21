@@ -4,6 +4,7 @@ import './../../styles/global.css';
 
 import { useLoginMutation } from '../../GraphQL/Mutations/loginMutation';
 import { UserContext } from '../../Contexts/UserContext';
+import { sucessAlert, loginError } from '../errorHandler';
 
 const LoginForm = (props, { loading }) => {
 
@@ -20,10 +21,10 @@ const LoginForm = (props, { loading }) => {
 
         if (signIndata.ok) {
             setauthenticated(true)
-            Alert.success('Login success')
+            sucessAlert('Login success')
             props.history.push('/questions')
         } else {
-            Alert.error(signIndata.error)
+            loginError()
             props.history.push('/login')
         }
     }

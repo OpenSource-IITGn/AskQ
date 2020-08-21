@@ -16,3 +16,12 @@ export const invalidError = (error) => {
 export const alreadySignedError = () => {
     Alert.info(`Already Signed up with this email Id.`)
 }
+
+
+export const sucessAlert = (alert) => {
+    Alert.success(alert)
+}
+
+export const loginError = () => {
+    Alert.error('Either Password or Email is Incorrect')
+}
