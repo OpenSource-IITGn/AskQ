@@ -24,7 +24,7 @@ func (r *Resolvers) GetPosts(args GetPostsArgs) (*GetPostsResponse, error) {
 	posts := []model.Post{}
 
 	if *args.Username == "" {
-		if r.DB.Find(&posts).RecordNotFound() {
+		if r.DB.Limit(args.Limit).Offset(args.Offset).Find(&posts).RecordNotFound() {
 			msg := "Not Questions Found"
 			return &GetPostsResponse{Status: 301, Msg: &msg, Posts: nil}, nil
 		}
@@ -37,7 +37,7 @@ func (r *Resolvers) GetPosts(args GetPostsArgs) (*GetPostsResponse, error) {
 		return &GetPostsResponse{Status: 300, Msg: nil, Posts: &postsResponse}, nil
 
 	} else {
-		if r.DB.Where("username = ?", *args.Username).Find(&posts).RecordNotFound() {
+		if r.DB.Limit(args.Limit).Offset(args.Offset).Where("username = ?", *args.Username).Find(&posts).RecordNotFound() {
 			msg := "Not Questions Found"
 			return &GetPostsResponse{Status: 301, Msg: &msg, Posts: nil}, nil
 		}
@@ -51,7 +51,7 @@ func (r *Resolvers) GetPosts(args GetPostsArgs) (*GetPostsResponse, error) {
 }
 
 type GetPostsArgs struct {
-	First    int32
+	Limit    int32
 	Offset   int32
 	Username *string
 }
