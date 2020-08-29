@@ -1,0 +1,1 @@
+export const LIMITS_PER_PAGE = 5

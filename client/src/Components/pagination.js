@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { Pagination } from 'rsuite';
 
 function CustomPagination(props) {
-    const [activePage, setActivePage] = useState(5);
+    const { active, onPageChange } = props
+    const [activePage, setActivePage] = useState(active);
 
     const handleSelect = (eventKey) => {
         setActivePage(eventKey)
+        onPageChange(eventKey)
     }
     return (
         <div>
@@ -14,8 +16,8 @@ function CustomPagination(props) {
                 last
                 next
                 first
+                pages={5}
                 size="lg"
-                pages={10}
                 activePage={activePage}
                 onSelect={handleSelect}
             />

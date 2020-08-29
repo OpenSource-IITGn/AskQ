@@ -6,11 +6,40 @@ import CustomPagination from './../Components/pagination';
 
 import './../styles/questions.css';
 import './../styles/global.css'
+import { usePostsQuery } from '../GraphQL/Queries/postsQuery';
+import { LIMITS_PER_PAGE } from '../constants';
 
 function Questions(props) {
 
     const handleClick = (e) => {
         props.history.push("/questions/create")
+    }
+
+    const page_number = parseInt(props.match.params.page, 10)
+    const limit = LIMITS_PER_PAGE
+    const offset = page_number ? (page_number - 1) * limit : 0
+    const postsData = usePostsQuery({ limit: limit, offset: offset })
+
+    if (postsData.loading) {
+        return (
+            <div>loading</div>
+        )
+    }
+    if (postsData.error) {
+        return (
+            <div> Error : postData.error </div>
+        )
+    }
+    const { data, fetchMore } = postsData
+    const { ok, error, posts } = data.getPosts
+
+    // id={id} showDetailed={true} title={title} body={body} timeSinceCreation={timeSinceCreation} tags={tags} vote={vote} numAnswers={numAnswers} userName={user.username} userId={user.id} 
+    const allQuestions = posts ? posts.map((post) =>
+        (<Question showDetailed={false} {...post} />)
+    ) : "No Questions Found"
+
+    const handlePageChange = (curr_page) => {
+        props.history.push(`/questions/${curr_page}`)
     }
 
     const header =
@@ -31,13 +60,11 @@ function Questions(props) {
                     <FlexboxGrid.Item colspan={14}>
                         {header}
                         <Divider>"Top Questions"</Divider>
-                        <Question showDetailed={false} />
-                        <Question showDetailed={false} />
-                        <Question showDetailed={false} />
+                        {allQuestions}
                     </FlexboxGrid.Item>
                 </FlexboxGrid>
                 <FlexboxGrid justify="center">
-                    <CustomPagination />
+                    <CustomPagination onPageChange={handlePageChange} active={page_number} />
                 </FlexboxGrid>
             </Content>
             <Footer>Footer</Footer>

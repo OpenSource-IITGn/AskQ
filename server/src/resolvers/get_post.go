@@ -23,7 +23,8 @@ func (r *Resolvers) GetPostDetailsByID(args struct{ Id string }) (*GetPostRespon
 func (r *Resolvers) GetPosts(args GetPostsArgs) (*GetPostsResponse, error) {
 	posts := []model.Post{}
 
-	if *args.Username == "" {
+	if args.Username == nil || *args.Username == "" {
+
 		if r.DB.Limit(args.Limit).Offset(args.Offset).Find(&posts).RecordNotFound() {
 			msg := "Not Questions Found"
 			return &GetPostsResponse{Status: 301, Msg: &msg, Posts: nil}, nil
