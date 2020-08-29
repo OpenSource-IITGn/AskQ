@@ -79,8 +79,8 @@ type Post {
 type Query {
 	getMyProfile: GetProfileResponse!
 	getProfile(username: String!): GetProfileResponse!
-	#getPosts(limit: Int!, offset: Int!, username: String): GetPostsResponse!
-	getQuestions(query: String, limit: Int!, offset: Int!, username: String): GetPostsResponse!
+	getPosts(squery: String, limit: Int!, offset: Int!, username: String): GetPostsResponse!
+	getQuestions(squery: String, limit: Int!, offset: Int!, username: String): GetPostsResponse!
 	#getAnswers(query: String, first: Int!, offset: Int!, user: String): GetPostsResponse!
 	getPostDetailsByID(id: String!): GetPostResponse!
 }
