@@ -19,11 +19,41 @@ func (r *Resolvers) GetPostDetailsByID(args struct{ Id string }) (*GetPostRespon
 
 // }
 
+// GetPosts : get Posts
+func (r *Resolvers) GetPosts(args GetPostsArgs) (*GetPostsResponse, error) {
+	posts := []model.Post{}
+
+	if *args.Username == "" {
+		if r.DB.Find(&posts).RecordNotFound() {
+			msg := "Not Questions Found"
+			return &GetPostsResponse{Status: 301, Msg: &msg, Posts: nil}, nil
+		}
+		var postsResponse []*PostResponse
+
+		for i := 0; i < len(posts); i++ {
+			postsResponse = append(postsResponse, &PostResponse{p: &posts[i], res: r})
+		}
+
+		return &GetPostsResponse{Status: 300, Msg: nil, Posts: &postsResponse}, nil
+
+	} else {
+		if r.DB.Where("username = ?", *args.Username).Find(&posts).RecordNotFound() {
+			msg := "Not Questions Found"
+			return &GetPostsResponse{Status: 301, Msg: &msg, Posts: nil}, nil
+		}
+		var postsResponse []*PostResponse
+
+		for i := 0; i < len(posts); i++ {
+			postsResponse = append(postsResponse, &PostResponse{p: &posts[i], res: r})
+		}
+		return &GetPostsResponse{Status: 300, Msg: nil, Posts: &postsResponse}, nil
+	}
+}
+
 type GetPostsArgs struct {
-	Query  *string
-	First  uint64
-	Offset uint64
-	User   *string
+	First    int32
+	Offset   int32
+	Username *string
 }
 
 type GetPostResponse struct {
@@ -33,9 +63,9 @@ type GetPostResponse struct {
 }
 
 type GetPostsResponse struct {
-	Status bool
+	Status int32
 	Msg    *string
-	Posts  []*PostResponse
+	Posts  *[]*PostResponse
 }
 
 func (r *GetPostResponse) Ok() int32 {
@@ -43,5 +73,13 @@ func (r *GetPostResponse) Ok() int32 {
 }
 
 func (r *GetPostResponse) Error() *string {
+	return r.Msg
+}
+
+func (r *GetPostsResponse) Ok() int32 {
+	return r.Status
+}
+
+func (r *GetPostsResponse) Error() *string {
 	return r.Msg
 }
