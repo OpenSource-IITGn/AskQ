@@ -1,6 +1,7 @@
 package resolvers
 
 import "model"
+import gorm "github.com/jinzhu/gorm"
 
 func (r *Resolvers) GetPostDetailsByID(args struct{ Id string }) (*GetPostResponse, error) {
 	post := model.Post{}
@@ -15,43 +16,71 @@ func (r *Resolvers) GetPostDetailsByID(args struct{ Id string }) (*GetPostRespon
 	return &GetPostResponse{Status: 300, Msg: nil, Post: &PostResponse{p: &post, res: r}}, nil
 }
 
-// func (r *Resolvers) GetQuestions(args GetPostsArgs) (*GetPostsResponse, error) {
-
-// }
-
-// GetPosts : get Posts
-func (r *Resolvers) GetPosts(args GetPostsArgs) (*GetPostsResponse, error) {
+// Get Questions
+func (r *Resolvers) GetQuestions(args GetPostsArgs) (GetPostsResponse, error) {
 	posts := []model.Post{}
-
-	if args.Username == nil || *args.Username == "" {
-
-		if r.DB.Limit(args.Limit).Offset(args.Offset).Find(&posts).RecordNotFound() {
-			msg := "Not Questions Found"
-			return &GetPostsResponse{Status: 301, Msg: &msg, Posts: nil}, nil
+	tx := r.DB.Where("post_type = 0")
+	if args.Username !=nil {
+		var user model.User
+		if err := r.DB.Order(gorm.Expr("LEVENSHTEIN(user_name, ?) ASC", *args.Username)).Limit(1).Find(&user); err!=nil {
+			if user.ID > 0 { 
+				tx = tx.Where("user_id = ?", user.ID)
+			}
 		}
-		var postsResponse []*PostResponse
-
-		for i := 0; i < len(posts); i++ {
-			postsResponse = append(postsResponse, &PostResponse{p: &posts[i], res: r})
-		}
-
-		return &GetPostsResponse{Status: 300, Msg: nil, Posts: &postsResponse}, nil
-
-	} else {
-		if r.DB.Limit(args.Limit).Offset(args.Offset).Where("username = ?", *args.Username).Find(&posts).RecordNotFound() {
-			msg := "Not Questions Found"
-			return &GetPostsResponse{Status: 301, Msg: &msg, Posts: nil}, nil
-		}
-		var postsResponse []*PostResponse
-
-		for i := 0; i < len(posts); i++ {
-			postsResponse = append(postsResponse, &PostResponse{p: &posts[i], res: r})
-		}
-		return &GetPostsResponse{Status: 300, Msg: nil, Posts: &postsResponse}, nil
 	}
+
+	if args.Query != nil {
+		tx = tx.Order(gorm.Expr("LEVENSHTEIN(CONCAT(title, tag1, tag2, tag3, tag4, tag5), ?) ASC", args.Query))
+	}
+
+	var postsResponse []*PostResponse
+	tx = tx.Limit(args.Limit).Offset(args.Offset).Order("updated_at desc")
+	if err := tx.Find(&posts).Error; err != nil {
+		msg := "Error while retrieving"
+		return GetPostsResponse{Status: 310, Msg: &msg, Posts: postsResponse}, nil
+	}
+
+	for _, v := range posts {
+		postsResponse = append(postsResponse, &PostResponse{p: &v, res: r})
+	}
+
+	return GetPostsResponse{Status: 300, Msg: nil, Posts: postsResponse}, nil
 }
 
+// GetPosts : get Posts
+// func (r *Resolvers) GetPosts(args GetPostsArgs) (*GetPostsResponse, error) {
+// 	posts := []model.Post{}
+
+// 	if args.Username == nil || *args.Username == "" {
+
+// 		if r.DB.Limit(args.Limit).Offset(args.Offset).Find(&posts).RecordNotFound() {
+// 			msg := "Not Questions Found"
+// 			return &GetPostsResponse{Status: 301, Msg: &msg, Posts: nil}, nil
+// 		}
+// 		var postsResponse []*PostResponse
+
+// 		for i := 0; i < len(posts); i++ {
+// 			postsResponse = append(postsResponse, &PostResponse{p: &posts[i], res: r})
+// 		}
+
+// 		return &GetPostsResponse{Status: 300, Msg: nil, Posts: &postsResponse}, nil
+
+// 	} else {
+// 		if r.DB.Limit(args.Limit).Offset(args.Offset).Where("username = ?", *args.Username).Find(&posts).RecordNotFound() {
+// 			msg := "Not Questions Found"
+// 			return &GetPostsResponse{Status: 301, Msg: &msg, Posts: nil}, nil
+// 		}
+// 		var postsResponse []*PostResponse
+
+// 		for i := 0; i < len(posts); i++ {
+// 			postsResponse = append(postsResponse, &PostResponse{p: &posts[i], res: r})
+// 		}
+// 		return &GetPostsResponse{Status: 300, Msg: nil, Posts: &postsResponse}, nil
+// 	}
+// }
+
 type GetPostsArgs struct {
+	Query *string
 	Limit    int32
 	Offset   int32
 	Username *string
@@ -66,21 +95,21 @@ type GetPostResponse struct {
 type GetPostsResponse struct {
 	Status int32
 	Msg    *string
-	Posts  *[]*PostResponse
+	Posts  []*PostResponse
 }
 
 func (r *GetPostResponse) Ok() int32 {
 	return r.Status
 }
 
-func (r *GetPostResponse) Error() *string {
+func (r GetPostResponse) Error() *string {
 	return r.Msg
 }
 
-func (r *GetPostsResponse) Ok() int32 {
+func (r GetPostsResponse) Ok() int32 {
 	return r.Status
 }
 
-func (r *GetPostsResponse) Error() *string {
+func (r GetPostsResponse) Error() *string {
 	return r.Msg
 }

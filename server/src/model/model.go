@@ -52,6 +52,8 @@ type Post struct {
 	// Question Reference
 	Answers []*Post `gorm:"foreignkey:QuesID"`
 	QuesID   uint64  `gorm:"index"`
+	// Votes
+	Vote int32  `gorm:"type:smallint"`
 }
 
 // Post Details Type
@@ -60,16 +62,15 @@ type PostDetails struct {
 	PostID uint64 `gorm:"primary_key;auto_increment:false"`
 	// Base Fields
 	Body string `gorm:"type:text;not null"`
-	Vote int32  `gorm:"type:smallint"`
 	// Comments
 	Comments []*Comment `gorm:"foreignkey:PostID"`
 }
 
 // View State Table
-type View struct {
+type Vote struct {
 	Post   Post   `gorm:"foreignkey:PostID;not null"`
 	PostID uint64 `gorm:"primary_key;auto_increment:false"`
 	User   User   `gorm:"foreignkey:UserID"`
 	UserID uint64 `gorm:"primary_key;auto_increment:false"`
-	State  int32  `gorm:"type:smallint;not null"`
+	State  bool  `gorm:"type:smallint;not null"`
 }

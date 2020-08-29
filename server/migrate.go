@@ -18,10 +18,10 @@ func main() {
 	d.DropTableIfExists(&model.Comment{})
 	d.DropTableIfExists(&model.Post{})
 	d.DropTableIfExists(&model.PostDetails{})
-	d.DropTableIfExists(&model.View{})
+	d.DropTableIfExists(&model.Vote{})
 	d.CreateTable(&model.User{})
 	d.CreateTable(&model.Comment{})
 	d.CreateTable(&model.Post{})
 	d.CreateTable(&model.PostDetails{})
-	d.CreateTable(&model.View{})
+	d.CreateTable(&model.Vote{})
 }

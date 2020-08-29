@@ -36,10 +36,10 @@ func (r *PostResponse) UpdatedAt() string {
 
 // Votes for PostResponse
 func (r *PostResponse) Vote() int32 {
-	if r.pd == nil {
-		r.pd = getpostdet(r.p, r.res)
-	}
-	return r.pd.Vote
+	// if r.pd == nil {
+	// 	r.pd = getpostdet(r.p, r.res)
+	// }
+	return r.p.Vote
 }
 
 // PostType for PostResponse
