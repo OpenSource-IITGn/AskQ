@@ -55,8 +55,7 @@ function AddQuestionForm(props) {
                     body,
                     tags
                 )
-            console.log(response.createPost)
-            if (response.createPost.ok === 202) {
+            if (response.createPost && response.createPost.ok === 202) {
                 return (
                     <div>
                         response.createPost.error

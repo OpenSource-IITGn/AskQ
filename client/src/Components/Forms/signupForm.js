@@ -5,6 +5,7 @@ import { useSignupMutation } from '../../GraphQL/Mutations/signupMutation'
 import '../../styles/global.css';
 import { TextField, model } from '../formValidation';
 import { invalidError, alreadySignedError, unknownError } from '../errorHandler';
+import { isEmpty } from '../../utils';
 
 
 const SignupForm = (props, { loading }) => {
@@ -19,9 +20,7 @@ const SignupForm = (props, { loading }) => {
 
 
   const handleSubmit = async () => {
-    if (formError) {
-      console.log(formError)
-
+    if (isEmpty(formError)) {
       invalidError(formError.name)
       return;
     }
