@@ -42,14 +42,7 @@ func getPostsGen(args GetPostsArgs, tx *gorm.DB, r *Resolvers) (GetPostsResponse
 		return GetPostsResponse{Status: 310, Msg: &msg, Posts: postsResponse}, nil
 	}
 
-	// Not Working -
-
-	// for _, v := range posts {
-	// 	fmt.Println(v.Title)
-	// 	postsResponse = append(postsResponse, &PostResponse{p: &v, res: r})
-	// }
-
-	for i := 0; i < len(posts); i++ {
+	for i, _ := range posts {
 		postsResponse = append(postsResponse, &PostResponse{p: &posts[i], res: r})
 	}
 
