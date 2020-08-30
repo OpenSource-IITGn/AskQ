@@ -22,7 +22,10 @@ function Question(props) {
     }
 
     const handleClick = () => {
-        // alert('clicked on question')
+        if (showDetailed) {
+            return
+        }
+        props.history.push(`/questions/${id}`)
     }
 
     return (

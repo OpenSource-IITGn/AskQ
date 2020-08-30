@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Form, FormGroup, ControlLabel, HelpBlock, ButtonToolbar, Button, FormControl, Panel, FlexboxGrid } from 'rsuite'
+import { Form, FormGroup, ControlLabel, HelpBlock, ButtonToolbar, Button, FormControl, Panel, FlexboxGrid, Alert } from 'rsuite'
 import { useCreatePostMutation, useUpdatePostMutation } from '../../GraphQL/Mutations/createPostMutation';
 
 import MdEditor from '../Editor/mdEditor'
@@ -55,14 +55,21 @@ function AddQuestionForm(props) {
                     body,
                     tags
                 )
-            if (response.createPost && response.createPost.ok === 202) {
+            if (response.data.createPost && response.data.createPost.ok === 202) {
                 return (
                     <div>
                         response.createPost.error
                     </div>
                 )
             }
-            props.history.push('/questions')
+            if (response.data.createPost && response.data.createPost.ok === 300) {
+                const createdPostId = response.data.createPost.error
+                props.history.push(`/questions/${createdPostId}`)
+            } else {
+                unknownError(response.data.createPost.error)
+                props.history.push(`/questions/page=1`)
+            }
+
         }
         catch (e) {
             unknownError('Failed to add Question - Try again')

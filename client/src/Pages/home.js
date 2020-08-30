@@ -16,7 +16,7 @@ function Home(props) {
                     <ButtonToolbar className="auth-buttons">
                         <Button componentClass={Link} to="/signup" appearance="default">Sign Up</Button>
                         <Button componentClass={Link} to="/login" appearance="primary">Login</Button>
-                        <Button componentClass={Link} to="/questions" appearance="ghost">Questions</Button>
+                        <Button componentClass={Link} to="/questions/page=1" appearance="ghost">Questions</Button>
                     </ButtonToolbar>
                 </div>
             </div>

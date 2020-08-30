@@ -22,12 +22,9 @@ export default class Routes extends Component {
                     <Route exact path="/signup" render={(routeProps) => <Signup {...routeProps} />} />
                     <Route exact path="/login" render={(routeProps) => <Login {...routeProps} />} />
                     <ProtectedRoute exact path="/questions/create" component={CreateQuestion} />
-
-                    <Route exact path="/questions/:page" render={(routeProps) => <Questions {...routeProps} />} />
+                    <Route exact path="/questions/page=:page" render={(routeProps) => <Questions {...routeProps} />} />
                     <Route exact path="/questions/:id" render={(routeProps) => <QuestionDetail {...routeProps} />} />
-                    <Route exact path="/questions/:id/edit" render={(routeProps) => <QuestionEdit {...routeProps} />} />
-
-                    {/* <ProtectedRoute exact path="/secret" component={Secret} /> */}
+                    <ProtectedRoute exact path="/questions/:id/edit" component={QuestionEdit} />
                 </Switch>
             </UserProvider>
 

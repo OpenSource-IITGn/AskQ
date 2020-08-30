@@ -22,7 +22,7 @@ const LoginForm = (props, { loading }) => {
             if (signIndata.ok) {
                 setauthenticated(true)
                 sucessAlert('Login success')
-                props.history.push('/questions')
+                props.history.push('/questions/page=1')
             } else {
                 loginError()
                 props.history.push('/login')

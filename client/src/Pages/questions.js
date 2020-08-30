@@ -35,11 +35,11 @@ function Questions(props) {
 
     // id={id} showDetailed={true} title={title} body={body} timeSinceCreation={timeSinceCreation} tags={tags} vote={vote} numAnswers={numAnswers} userName={user.username} userId={user.id} 
     const allQuestions = posts ? posts.map((post) =>
-        (<Question showDetailed={false} {...post} />)
+        (<Question showDetailed={false} {...post} {...props} />)
     ) : "No Questions Found"
 
     const handlePageChange = (curr_page) => {
-        props.history.push(`/questions/${curr_page}`)
+        props.history.push(`/questions/page=${curr_page}`)
     }
 
     const header =
