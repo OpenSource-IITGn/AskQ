@@ -1,7 +1,10 @@
 package resolvers
 
-import "model"
-import gorm "github.com/jinzhu/gorm"
+import (
+	"model"
+
+	gorm "github.com/jinzhu/gorm"
+)
 
 func (r *Resolvers) GetPostDetailsByID(args struct{ Id string }) (*GetPostResponse, error) {
 	post := model.Post{}
@@ -16,14 +19,13 @@ func (r *Resolvers) GetPostDetailsByID(args struct{ Id string }) (*GetPostRespon
 	return &GetPostResponse{Status: 300, Msg: nil, Post: &PostResponse{p: &post, res: r}}, nil
 }
 
-
 // Get posts general function
 func getPostsGen(args GetPostsArgs, tx *gorm.DB, r *Resolvers) (GetPostsResponse, error) {
 	posts := []model.Post{}
-	if args.Username !=nil {
+	if args.Username != nil {
 		var user model.User
-		if err := r.DB.Order(gorm.Expr("LEVENSHTEIN(user_name, ?) ASC", *args.Username)).Limit(1).Find(&user); err!=nil {
-			if user.ID > 0 { 
+		if err := r.DB.Order(gorm.Expr("LEVENSHTEIN(user_name, ?) ASC", *args.Username)).Limit(1).Find(&user); err != nil {
+			if user.ID > 0 {
 				tx = tx.Where("user_id = ?", user.ID)
 			}
 		}
@@ -40,11 +42,18 @@ func getPostsGen(args GetPostsArgs, tx *gorm.DB, r *Resolvers) (GetPostsResponse
 		return GetPostsResponse{Status: 310, Msg: &msg, Posts: postsResponse}, nil
 	}
 
-	for _, v := range posts {
-		postsResponse = append(postsResponse, &PostResponse{p: &v, res: r})
+	// Not Working -
+
+	// for _, v := range posts {
+	// 	fmt.Println(v.Title)
+	// 	postsResponse = append(postsResponse, &PostResponse{p: &v, res: r})
+	// }
+
+	for i := 0; i < len(posts); i++ {
+		postsResponse = append(postsResponse, &PostResponse{p: &posts[i], res: r})
 	}
 
-	return GetPostsResponse{Status: 300, Msg: nil, Posts: postsResponse}, nil	
+	return GetPostsResponse{Status: 300, Msg: nil, Posts: postsResponse}, nil
 }
 
 // Get Questions
@@ -60,7 +69,7 @@ func (r *Resolvers) GetPosts(args GetPostsArgs) (GetPostsResponse, error) {
 }
 
 type GetPostsArgs struct {
-	Squery *string
+	Squery   *string
 	Limit    int32
 	Offset   int32
 	Username *string
