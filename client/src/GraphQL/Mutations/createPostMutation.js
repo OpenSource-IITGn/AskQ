@@ -34,9 +34,6 @@ export const useCreatePostMutation = () => {
     // const [_, setAuthToken, removeAuthtoken] = useAuthToken();
     const [mutation, mutationResults] = useMutation(CREATE_POST, {
         //if the mutation succeed, we save the token for later
-        onCompleted: (data) => {
-            console.log(data)
-        },
     });
 
     //we have rewritten the function to have a cleaner interface
@@ -71,9 +68,6 @@ export const useUpdatePostMutation = () => {
     // const [_, setAuthToken, removeAuthtoken] = useAuthToken();
     const [mutation, mutationResults] = useMutation(UPDATE_POST, {
         //if the mutation succeed, we save the token for later
-        onCompleted: (data) => {
-            console.log(data)
-        },
     });
 
     //we have rewritten the function to have a cleaner interface

@@ -33,9 +33,6 @@ export const useCreateCommentMutation = () => {
 
     const [mutation, mutationResults] = useMutation(CREATE_COMMENT, {
         //if the mutation succeed, we save the token for later
-        onCompleted: (data) => {
-            console.log(data)
-        },
     });
 
     //we have rewritten the function to have a cleaner interface
