@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Panel, FlexboxGrid, Button, Form, Alert } from 'rsuite'
-import { useCreatePostMutation } from './../../GraphQL/Mutations/createPostMutation'
+import { useCreatePostMutation, useUpdatePostMutation } from './../../GraphQL/Mutations/createPostMutation'
 
 import MdEditor from '../Editor/mdEditor';
 import './../../styles/global.css'
@@ -11,8 +11,12 @@ import { unAuthorizedError, unknownError } from './../errorHandler'
 function AddAnswerForm(props) {
     const questionId = props.match.params.id
     const history = useHistory();
+    const { isEditing, ansId, ansBody } = props;
+
 
     const [createPostMutation, createPostMutationResults] = useCreatePostMutation();
+    const [updatePostMutation, updatePostMutationResults] = useUpdatePostMutation();
+
 
     const postType = 1
     const quesid = questionId
@@ -38,8 +42,15 @@ function AddAnswerForm(props) {
     const { user } = userData.data.getMyProfile
 
     const handleSubmit = async () => {
+        const pid = ansId
+        const title = null
         try {
-            const mutation = await createPostMutation(
+            const mutation = isEditing ? await updatePostMutation(
+                pid,
+                title,
+                body,
+                tags
+            ) : await createPostMutation(
                 postType,
                 quesid,
                 title,
@@ -48,14 +59,14 @@ function AddAnswerForm(props) {
             )
 
             const { data } = mutation
-            const response = data.createPost
+            const response = isEditing ? data.updatePost : data.createPost
 
             if (response.ok === 202) {
                 unAuthorizedError(response.error, history)
             } else {
-                const ansId = data.createPost.error
+                const ansId = response.error
                 setBody("")
-                props.onAnswerSubmit(
+                !isEditing ? props.onAnswerSubmit(
                     {
                         body: body,
                         comments: [],
@@ -67,6 +78,10 @@ function AddAnswerForm(props) {
                             username: user.username
                         },
                         vote: 0
+                    }
+                ) : props.onAnswerUpdate(
+                    {
+                        body: body
                     }
                 )
             }
@@ -84,7 +99,7 @@ function AddAnswerForm(props) {
     return (
         <Form onSubmit={handleSubmit}>
             <Panel className="post-card">
-                <MdEditor type="answer" handleChange={handleBodyChange} placeHolder="Write your answer here" />
+                <MdEditor initialValue={ansBody} type="answer" handleChange={handleBodyChange} placeHolder="Write your answer here" />
                 <FlexboxGrid justify="end">
                     <Button appearance="primary" type="submit">Submit</Button>
                 </FlexboxGrid>

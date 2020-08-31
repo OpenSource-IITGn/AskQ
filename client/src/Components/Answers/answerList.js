@@ -11,7 +11,7 @@ function AnswerList(props) {
     const [answersList, setAnswersList, updateAnswerList] = useContext(AnswersContext)
     const answerBlocks = answersList.map((a, index) => (
         <CommentsProvider comments={a.comments} key={index} >
-            <Answer answerDetails={a} />
+            <Answer answerDetails={a} {...props} />
         </CommentsProvider>
     ))
 
