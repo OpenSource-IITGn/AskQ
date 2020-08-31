@@ -37,7 +37,6 @@ export const UserProvider = (props) => {
 
         let isAuthenticated = false
         const response = userData.data.getMyProfile
-        console.log(response)
         const isUser = (response.ok === 200)
 
         if (!user) {
@@ -46,7 +45,6 @@ export const UserProvider = (props) => {
         }
 
         const userProfile = response.user
-        console.log(userProfile)
 
         if (isUser && authToken) {
             isAuthenticated = true
