@@ -14,4 +14,4 @@ query getPosts($limit:Int!, $offset:Int!, $username: String){
 } 
 `;
 
-export const usePostsQuery = (variables) => useQuery(POSTS_QUERY, { variables: variables, fetchPolicy: "cache-and-network", onCompleted: (data) => console.log(data), onError: (error) => console.log(error) });
+export const usePostsQuery = (variables) => useQuery(POSTS_QUERY, { variables: variables, fetchPolicy: "cache-and-network" });

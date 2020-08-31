@@ -6,8 +6,8 @@ import CustomPagination from './../Components/pagination';
 
 import './../styles/questions.css';
 import './../styles/global.css'
-import { usePostsQuery } from '../GraphQL/Queries/postsQuery';
 import { LIMITS_PER_PAGE } from '../constants';
+import { useQuestionsQuery } from '../GraphQL/Queries/questionsQuery';
 
 function Questions(props) {
 
@@ -18,24 +18,23 @@ function Questions(props) {
     const page_number = parseInt(props.match.params.page, 10)
     const limit = LIMITS_PER_PAGE
     const offset = page_number ? (page_number - 1) * limit : 0
-    const postsData = usePostsQuery({ limit: limit, offset: offset })
+    const questionsData = useQuestionsQuery({ limit: limit, offset: offset })
 
-    if (postsData.loading) {
+    if (questionsData.loading) {
         return (
             <div>loading</div>
         )
     }
-    if (postsData.error) {
+    if (questionsData.error) {
         return (
-            <div> Error : postData.error </div>
+            <div> Error : questionData.error </div>
         )
     }
-    const { data, fetchMore } = postsData
-    const { ok, error, posts } = data.getPosts
+    const { data, fetchMore } = questionsData
+    const { ok, error, posts } = data.getQuestions
 
-    // id={id} showDetailed={true} title={title} body={body} timeSinceCreation={timeSinceCreation} tags={tags} vote={vote} numAnswers={numAnswers} userName={user.username} userId={user.id} 
-    const allQuestions = posts ? posts.map((post) =>
-        (<Question showDetailed={false} {...post} {...props} />)
+    const allQuestions = posts ? posts.map((question) =>
+        (<Question showDetailed={false} {...question} {...props} />)
     ) : "No Questions Found"
 
     const handlePageChange = (curr_page) => {
