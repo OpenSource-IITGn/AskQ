@@ -2,16 +2,14 @@ import React from 'react'
 import CustomNavbar from '../Components/navbar'
 import LoginForm from '../Components/Forms/loginForm'
 import { Container, Header, Content, FlexboxGrid, Panel, Footer } from 'rsuite';
+import Layout from './Layout/layout';
 
 import './../styles/global.css'
 import './../styles/auth.css'
 
 function Login(props) {
     return (
-        <Container className="full-height">
-            <Header>
-                <CustomNavbar {...props} />
-            </Header>
+        <Layout {...props}>
             <Content className="centered-container full-width">
                 <FlexboxGrid justify="center" className="full-width">
                     <FlexboxGrid.Item colspan={10}>
@@ -21,8 +19,7 @@ function Login(props) {
                     </FlexboxGrid.Item>
                 </FlexboxGrid>
             </Content>
-            <Footer>Footer</Footer>
-        </Container>
+        </Layout>
     )
 }
 

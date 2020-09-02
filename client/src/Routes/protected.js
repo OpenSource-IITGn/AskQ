@@ -21,7 +21,6 @@ export default function ProtectedRoute({ component: Component, ...props }) {
     const user = userData.data.getMyProfile.user
 
     if (isUser && authToken) {
-        alert('Authenticated')
         isAuthenticated = true
     }
 

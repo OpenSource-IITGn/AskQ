@@ -1,5 +1,6 @@
 import React from 'react'
 import CreateQuestion from './createQuestion'
+import Layout from './Layout/layout'
 
 function QuestionEdit(props) {
 

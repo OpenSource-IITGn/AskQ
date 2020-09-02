@@ -8,6 +8,9 @@ import './../styles/questions.css';
 import './../styles/global.css'
 import { LIMITS_PER_PAGE } from '../constants';
 import { useQuestionsQuery } from '../GraphQL/Queries/questionsQuery';
+import Layout from './Layout/layout';
+import questionList from '../Components/Questions/questionList';
+import QuestionList from '../Components/Questions/questionList';
 
 function Questions(props) {
 
@@ -16,26 +19,6 @@ function Questions(props) {
     }
 
     const page_number = parseInt(props.match.params.page, 10)
-    const limit = LIMITS_PER_PAGE
-    const offset = page_number ? (page_number - 1) * limit : 0
-    const questionsData = useQuestionsQuery({ limit: limit, offset: offset })
-
-    if (questionsData.loading) {
-        return (
-            <div>loading</div>
-        )
-    }
-    if (questionsData.error) {
-        return (
-            <div> Error : questionData.error </div>
-        )
-    }
-    const { data, fetchMore } = questionsData
-    const { ok, error, posts } = data.getQuestions
-
-    const allQuestions = posts ? posts.map((question) =>
-        (<Question showDetailed={false} {...question} {...props} />)
-    ) : "No Questions Found"
 
     const handlePageChange = (curr_page) => {
         props.history.push(`/questions/page=${curr_page}`)
@@ -50,24 +33,20 @@ function Questions(props) {
         </FlexboxGrid>)
 
     return (
-        <Container className="full-height">
-            <Header>
-                <CustomNavbar {...props} />
-            </Header>
+        <Layout {...props}>
             <Content className="horizontal-margin top-margin">
                 <FlexboxGrid justify="center" className="full-width">
                     <FlexboxGrid.Item colspan={14}>
                         {header}
                         <Divider>"Top Questions"</Divider>
-                        {allQuestions}
+                        <QuestionList {...props} page_number={page_number} />
                     </FlexboxGrid.Item>
                 </FlexboxGrid>
                 <FlexboxGrid justify="center">
                     <CustomPagination onPageChange={handlePageChange} active={page_number} />
                 </FlexboxGrid>
             </Content>
-            <Footer>Footer</Footer>
-        </Container>
+        </Layout>
     )
 }
 

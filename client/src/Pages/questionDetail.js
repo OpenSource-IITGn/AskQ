@@ -8,40 +8,22 @@ import './../styles/global.css'
 import Question from './../Components/Questions/question';
 import QuestionDetails from '../Components/Questions/questionDetails'
 import { usePostDetailsQuery } from './../GraphQL/Queries/postDetailsQuery'
+import Layout from './Layout/layout'
 
 function QuestionDetail(props) {
 
     const quesId = props.match.params.id
-    const postData = usePostDetailsQuery({ id: quesId })
-
-    if (postData.loading) {
-        return (
-            <div>loading</div>
-        )
-    }
-    if (postData.error) {
-        return (
-            <div> Error : postData.error </div>
-        )
-    }
-
-    const { ok, error, post } = postData.data.getPostDetailsByID
 
     return (
-        <Container className="full-height">
-            <Header>
-                <CustomNavbar {...props} />
-            </Header>
+        <Layout {...props}>
             <Content className="horizontal-margin top-margin">
                 <FlexboxGrid justify="center" className="">
                     <FlexboxGrid.Item colspan={14}>
-                        <AnswersProvider initialState={post.answers}>
-                            <QuestionDetails {...props} post={post} />
-                        </AnswersProvider>
+                        <QuestionDetails {...props} quesId={quesId} />
                     </FlexboxGrid.Item>
                 </FlexboxGrid>
             </Content>
-        </Container>
+        </Layout>
     )
 }
 

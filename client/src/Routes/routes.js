@@ -10,6 +10,7 @@ import QuestionDetail from './../Pages/questionDetail';
 import CreateQuestion from './../Pages/createQuestion';
 import QuestionEdit from '../Pages/questionEdit';
 import { UserProvider } from '../Contexts/UserContext';
+import ProfileDashboard from '../Pages/profileDashboard';
 
 export default class Routes extends Component {
     render() {
@@ -18,6 +19,7 @@ export default class Routes extends Component {
                 <Switch>
 
                     <Route exact path="/" render={(routeProps) => <Home {...routeProps} />} />
+                    <Route exact path="/dashboard" render={(routeProps) => <ProfileDashboard {...routeProps} />} />
 
                     <Route exact path="/signup" render={(routeProps) => <Signup {...routeProps} />} />
                     <Route exact path="/login" render={(routeProps) => <Login {...routeProps} />} />
