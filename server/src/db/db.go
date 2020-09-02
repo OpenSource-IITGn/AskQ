@@ -12,11 +12,15 @@ type DB struct {
 
 // ConnectDB : connecting DB
 func ConnectDB() (*DB, error) {
-	db, err := gorm.Open("postgres", "host=localhost port=5432 user=test dbname=test password=test sslmode=disable")
+	db, err := gorm.Open("postgres", "host=localhost port=5432 user=go dbname=go password=go sslmode=disable")
 
 	if err != nil {
 		panic(err)
 	}
 
+	out := db.Exec("CREATE EXTENSION IF NOT EXISTS pg_trgm;")
+	if err := out.Error; err != nil {
+		panic(err)
+	}
 	return &DB{db}, nil
 }

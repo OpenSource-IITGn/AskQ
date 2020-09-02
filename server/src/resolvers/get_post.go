@@ -1,6 +1,7 @@
 package resolvers
 
 import (
+	"fmt"
 	"model"
 
 	gorm "github.com/jinzhu/gorm"
@@ -24,7 +25,7 @@ func getPostsGen(args GetPostsArgs, tx *gorm.DB, r *Resolvers) (GetPostsResponse
 	posts := []model.Post{}
 	if args.Username != nil {
 		var user model.User
-		if err := r.DB.Order(gorm.Expr("LEVENSHTEIN(user_name, ?) ASC", *args.Username)).Limit(1).Find(&user); err != nil {
+		if err := r.DB.Order(gorm.Expr("SIMILARITY(user_name, ?) ASC", *args.Username)).Limit(1).Find(&user); err != nil {
 			if user.ID > 0 {
 				tx = tx.Where("user_id = ?", user.ID)
 			}
@@ -32,7 +33,8 @@ func getPostsGen(args GetPostsArgs, tx *gorm.DB, r *Resolvers) (GetPostsResponse
 	}
 
 	if args.Squery != nil {
-		tx = tx.Order(gorm.Expr("LEVENSHTEIN(CONCAT(title, tag1, tag2, tag3, tag4, tag5), ?) ASC", args.Squery))
+		fmt.Println(*args.Squery)
+		tx = tx.Order(gorm.Expr("SIMILARITY(CONCAT(title, tag1, tag2, tag3, tag4, tag5), ?) DESC", *args.Squery))
 	}
 
 	var postsResponse []*PostResponse
