@@ -39,7 +39,7 @@ function CustomNavbar(props) {
 
                 <Nav className="navbar-nav" pullRight>
                     <Nav.Item onClick={handleLogout}>Log Out</Nav.Item>
-                    <Nav.Item icon={<Icon icon="cog" />} >Settings</Nav.Item>
+                    <Nav.Item icon={<Icon icon="cog" />} >Dashboard</Nav.Item>
                 </Nav>
             </Navbar.Body >
         </Navbar >
