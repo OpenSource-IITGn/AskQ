@@ -18,8 +18,11 @@ func ConnectDB() (*DB, error) {
 		panic(err)
 	}
 
-	out := db.Exec("CREATE EXTENSION IF NOT EXISTS pg_trgm;")
-	if err := out.Error; err != nil {
+	if err := db.Exec("CREATE EXTENSION IF NOT EXISTS pg_trgm;").Error; err != nil {
+		panic(err)
+	}
+
+	if err := db.Exec("CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;").Error; err != nil {
 		panic(err)
 	}
 	return &DB{db}, nil
