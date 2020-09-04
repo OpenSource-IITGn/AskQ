@@ -1,8 +1,5 @@
 import React, { useState, useContext } from 'react'
 import { Container, Header, Content, FlexboxGrid } from 'rsuite'
-import CustomNavbar from '../Components/navbar'
-import { AnswersProvider } from './../Contexts/AnswersContext'
-
 import './../styles/questions.css'
 import './../styles/global.css'
 import Question from './../Components/Questions/question';

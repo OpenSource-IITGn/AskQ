@@ -1,5 +1,4 @@
 import React from 'react'
-import CustomNavbar from '../Components/navbar'
 import LoginForm from '../Components/Forms/loginForm'
 import { Container, Header, Content, FlexboxGrid, Panel, Footer } from 'rsuite';
 import Layout from './Layout/layout';

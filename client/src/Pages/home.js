@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, ButtonToolbar } from 'rsuite';
 import { Link } from 'react-router-dom';
-import CustomNavbar from '../Components/navbar';
+import CustomNavbar from '../Components/Navbar/navbar';
 import '../styles/global.css';
 import '../styles/home.css';
 
