@@ -9,6 +9,7 @@ query getQuestions($limit:Int!, $offset:Int!, $username: String){
     posts {
       id
       title
+      body
     }
   }
 } 

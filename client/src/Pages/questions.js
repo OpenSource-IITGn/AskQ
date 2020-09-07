@@ -3,13 +3,12 @@ import { Button, Container, Header, Content, FlexboxGrid, Footer, Divider } from
 import Question from './../Components/Questions/question';
 import CustomPagination from './../Components/pagination';
 
-import './../styles/questions.css';
-import './../styles/global.css'
 import { LIMITS_PER_PAGE } from '../constants';
-import { useQuestionsQuery } from '../GraphQL/Queries/questionsQuery';
 import Layout from './Layout/layout';
-import questionList from '../Components/Questions/questionList';
 import QuestionList from '../Components/Questions/questionList';
+
+// import './../styles/questions.css';
+// import './../styles/global.css'
 
 function Questions(props) {
 
@@ -33,11 +32,9 @@ function Questions(props) {
 
     return (
         <Layout {...props}>
-            <Content className="horizontal-margin top-margin">
+            <Content className="horizontal-margin top-margin" style={{ borderRadius: "16px" }}>
                 <FlexboxGrid justify="center" className="full-width">
-                    <FlexboxGrid.Item colspan={14}>
-                        {header}
-                        <Divider>"Top Questions"</Divider>
+                    <FlexboxGrid.Item colspan={24}>
                         <QuestionList {...props} page_number={page_number} />
                     </FlexboxGrid.Item>
                 </FlexboxGrid>

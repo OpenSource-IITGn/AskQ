@@ -53,6 +53,7 @@
     ]
   },
   "devDependencies": {
+    "babel-preset-rsuite": "^4.0.1",
     "eslint-plugin-react-hooks": "^4.0.8"
   },
   "resolutions": {

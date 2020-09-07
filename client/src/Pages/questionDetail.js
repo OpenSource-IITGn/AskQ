@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { Container, Header, Content, FlexboxGrid } from 'rsuite'
-import './../styles/questions.css'
+// import './../styles/questions.css'
 import './../styles/global.css'
 import Question from './../Components/Questions/question';
 import QuestionDetails from '../Components/Questions/questionDetails'

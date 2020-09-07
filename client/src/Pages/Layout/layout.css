@@ -29,13 +29,12 @@
     display: flex;
     color: #fff;
     align-items: center;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     /* Rectangle 2 */
     background: linear-gradient(90deg, #FFBDCD 0%, #FF7171 100%);
 }
 
 .main-button .rs-btn svg {
-    /* padding-right: 5px; */
     margin-right: 10px;
 }
 

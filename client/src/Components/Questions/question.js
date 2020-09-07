@@ -3,10 +3,11 @@ import { FlexboxGrid, Button, Divider, Panel, Tag, TagGroup, ButtonGroup, Button
 import { Link } from 'react-router-dom'
 import { useAuthorized } from '../../hooks/authorized'
 import { UserContext } from '../../Contexts/UserContext'
+import { ReactComponent as LikeLogo } from './../../assets/thumbs.svg'
+import { ReactComponent as BookMarkLogo } from './../../assets/bookmark.svg'
+import avatarPng from './../../assets/avatar.png';
 
-
-import "./../../styles/questions.css"
-
+import './question.css';
 
 function Question(props) {
     const { id, showDetailed, title, body, timeSinceCreation, tags, vote, numAnswers, userName, userId } = props;
@@ -28,6 +29,13 @@ function Question(props) {
         props.history.push(`/questions/${id}`)
     }
 
+    const displayText = (text) => {
+        if (showDetailed) {
+            return text
+        }
+        const wrappedText = text
+        return wrappedText
+    }
     return (
         <div >
             <Panel onClick={handleClick} className="question-row">
@@ -54,39 +62,36 @@ function Question(props) {
                         </ButtonGroup>)}
                     </FlexboxGrid.Item>
                 </FlexboxGrid>
-
                 <br />
                 <div className="question-body">
-                    <div>
-                        <h4 className="question-title">{title}</h4>
+                    <div className="question-header">
+                        <div className="avatar-img">
+                            <img src={avatarPng} />
+                        </div>
+                        <div>
+                            <h4 className="question-title">{title}</h4>
+                            <div className="question-desc">
+                                <p className="author">Sean Parker</p>
+                                <p>10 min ago</p>
+                            </div>
+                        </div>
                     </div>
-                    <br />
                     <div className="">
-                        <article dangerouslySetInnerHTML={{ __html: body }}></article>
+                        <article dangerouslySetInnerHTML={{ __html: displayText(body) }} className={!showDetailed ? "wrap-text post-body" : "post-body"}></article>
                     </div>
                     <br />
-                    <FlexboxGrid justify="end">
-                        <FlexboxGrid.Item>
-                            asked {timeSinceCreation} ago <a href="https://www.google.com"> {userName}</a>
-                        </FlexboxGrid.Item>
-                    </FlexboxGrid>
                 </div>
-                <Divider />
                 <FlexboxGrid justify="space-between">
                     <FlexboxGrid.Item>
-                        <ButtonToolbar>
-                            <Button><Icon icon='thumbs-o-up' /></Button>
-                            <Button>{vote} Votes</Button>
-                            <Button><Icon icon='thumbs-o-down' /></Button>
-                            <span style={{ margin: "0 1em" }}></span>
-                            <Button><Icon icon='star' /> Favourite</Button>
-                        </ButtonToolbar>
+                        <Button className="question-icons">
+                            <LikeLogo />
+                        </Button>
                     </FlexboxGrid.Item>
                     <FlexboxGrid.Item>
-                        <ButtonGroup>
-                            <Button>{numAnswers} Answers /</Button>
-                            <Button>730 Views</Button>
-                        </ButtonGroup>
+                        <div className="question-footer">
+                            <p>17 votes</p>
+                            <Button className="question-icons"><BookMarkLogo /></Button>
+                        </div>
                     </FlexboxGrid.Item>
                 </FlexboxGrid>
             </Panel>
