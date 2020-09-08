@@ -38,8 +38,8 @@ function AddQuestionForm(props) {
     const [tags, setTags] = useState(tags_var)
 
 
-    const handleSubmit = async () => {
-
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         try {
             const pid = postId
             const response = isEditing ?
