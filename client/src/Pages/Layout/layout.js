@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Footer, Container, Header, Sidenav, Sidebar, Nav, Icon, Affix, Button } from 'rsuite'
+import { Footer, Container, Header, Sidenav, Sidebar, Nav, Icon, Affix, Button, FlexboxGrid } from 'rsuite'
 import CustomNavbar from '../../Components/Navbar/navbar'
 import { ReactComponent as Logo } from './../../assets/logo.svg'
 import { ReactComponent as DashboardLogo } from './../../assets/dashboard.svg'
@@ -27,67 +27,72 @@ const Layout = (props) => {
     const [expand, setExpand] = useState(true)
     return (
         <Container>
-            <Affix>
-                <Sidebar
-                    className="custom-sidenav"
-                    style={{ display: 'flex', flexDirection: 'column' }}
-                    collapsible
-                >
-                    <Sidenav.Header>
-                        <div
-                            className="side-header"
-                            style={headerStyles}>
-                            <Logo />
-                        </div>
-                    </Sidenav.Header>
-                    <Sidenav
-                        expanded={true}
-                        defaultOpenKeys={['3']}
-                        appearance="subtle"
-                        activeKey="1"
+            <FlexboxGrid>
+                <FlexboxGrid.Item colspan={5}>
+                    <Sidebar
+                        className="custom-sidenav"
+                        style={{ display: 'flex', flexDirection: 'column' }}
+                        collapsible
                     >
-                        <Sidenav.Body>
-                            <div className="main-button">
-                                <Button>
-                                    <PlusLogo /><span>Ask Question</span>
-                                </Button>
+                        <Sidenav.Header>
+                            <div
+                                className="side-header"
+                                style={headerStyles}>
+                                <Logo />
                             </div>
-                            <Nav className="side-nav">
-                                <Nav.Item className="side-nav-item" eventKey="1" active icon={<QuestionsLogo />}>
-                                    <span>Questions</span>
-                                </Nav.Item>
-                                <Nav.Item className="side-nav-item" eventKey="2" icon={<DashboardLogo />}>
-                                    <span>Dashboard</span>
-                                </Nav.Item>
-                                <Nav.Item className="side-nav-item" eventKey="3" icon={<UsersLogo />}>
-                                    <span>Users</span>
-                                </Nav.Item>
-                                <Nav.Item className="side-nav-item" eventKey="4" icon={<CoursesLogo />}>
-                                    <span>Courses</span>
-                                </Nav.Item>
-                            </Nav>
-                            <div className="trending-tags">
-                                <p className="trending-heading">Trending</p>
-                                <Button className="trending-buttons">#Articles</Button>
-                                <Button className="trending-buttons">#Course</Button>
-                                <Button className="trending-buttons">#LalMinar</Button>
-                                <Button className="trending-buttons">#BanHSS</Button>
-                                <Button className="trending-buttons">#2Degree</Button>
-                            </div>
-                        </Sidenav.Body>
-                    </Sidenav>
-                </Sidebar>
-            </Affix>
+                        </Sidenav.Header>
+                        <Sidenav
+                            expanded={true}
+                            defaultOpenKeys={['3']}
+                            appearance="subtle"
+                            activeKey="1"
+                        >
+                            <Sidenav.Body>
+                                <div className="main-button">
+                                    <Button>
+                                        <PlusLogo /><span>Ask Question</span>
+                                    </Button>
+                                </div>
+                                <Nav className="side-nav">
+                                    <Nav.Item className="side-nav-item" eventKey="1" active icon={<QuestionsLogo />}>
+                                        <span>Questions</span>
+                                    </Nav.Item>
+                                    <Nav.Item className="side-nav-item" eventKey="2" icon={<DashboardLogo />}>
+                                        <span>Dashboard</span>
+                                    </Nav.Item>
+                                    <Nav.Item className="side-nav-item" eventKey="3" icon={<UsersLogo />}>
+                                        <span>Users</span>
+                                    </Nav.Item>
+                                    <Nav.Item className="side-nav-item" eventKey="4" icon={<CoursesLogo />}>
+                                        <span>Courses</span>
+                                    </Nav.Item>
+                                </Nav>
+                                <div className="trending-tags">
+                                    <p className="trending-heading">Trending</p>
+                                    <Button className="trending-buttons">#Articles</Button>
+                                    <Button className="trending-buttons">#Course</Button>
+                                    <Button className="trending-buttons">#LalMinar</Button>
+                                    <Button className="trending-buttons">#BanHSS</Button>
+                                    <Button className="trending-buttons">#2Degree</Button>
+                                </div>
+                            </Sidenav.Body>
+                        </Sidenav>
+                    </Sidebar>
 
-            <Container className="full-height">
-                <Header>
-                    <Affix>
-                        <CustomNavbar {...props} />
-                    </Affix>
-                </Header>
-                {props.children}
-                <Footer>Footer</Footer>
-            </Container>
+                </FlexboxGrid.Item>
+                <FlexboxGrid.Item colspan={19}>
+                    <Container className="full-height">
+                        <Header>
+                            <Affix>
+                                <CustomNavbar {...props} />
+                            </Affix>
+                        </Header>
+                        {props.children}
+                        <Footer>Footer</Footer>
+                    </Container>
+                </FlexboxGrid.Item>
+            </FlexboxGrid>
+
         </Container >
 
     )

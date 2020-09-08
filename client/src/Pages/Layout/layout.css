@@ -1,7 +1,10 @@
 .custom-sidenav {
     height: 100vh;
     background-color: #fff;
-    width: 300px !important;
+    /* width: 100% !important; */
+    position: fixed;
+    width: 21% !important;
+    /* width: 300px !important; */
     /* padding-top: 3em; */
 }
 
