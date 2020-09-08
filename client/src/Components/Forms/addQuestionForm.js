@@ -65,12 +65,16 @@ function AddQuestionForm(props) {
             if (response.data.createPost && response.data.createPost.ok === 300) {
                 const createdPostId = response.data.createPost.error
                 props.history.push(`/questions/${createdPostId}`)
+            } else {
+                unknownError(response.data.createPost.error)
             }
             if (response.data.updatePost && response.data.updatePost.ok === 300) {
                 const createdPostId = response.data.updatePost.error
                 props.history.push(`/questions/${createdPostId}`)
+            } else {
+                unknownError(response.data.createPost.error)
             }
-            unknownError(response.data.createPost.error)
+
             props.history.push(`/questions/page=1`)
 
         }
