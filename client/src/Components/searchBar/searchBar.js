@@ -3,11 +3,18 @@ import { ReactComponent as SearchLogo } from "./../../assets/Search.svg";
 import "./searchBar.css";
 import { Button } from "rsuite";
 
-function SearchBar() {
+function SearchBar(props) {
   const [searchQuery, setsearchQuery] = useState("");
+  const { handleSearch } = props;
+
   const handleChange = (e) => {
     setsearchQuery(e.target.value);
   };
+
+  const handleSubmit = () => {
+    handleSearch(searchQuery);
+  };
+
   return (
     <div className="search-bar">
       <input
@@ -20,7 +27,7 @@ function SearchBar() {
       <div className="placeholder-logo">
         <SearchLogo />
       </div>
-      <Button className="search-btn">
+      <Button className="search-btn" onClick={handleSubmit}>
         <SearchLogo />
         Search
       </Button>
