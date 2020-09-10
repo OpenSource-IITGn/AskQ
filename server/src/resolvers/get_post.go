@@ -1,7 +1,6 @@
 package resolvers
 
 import (
-	"fmt"
 	"model"
 
 	gorm "github.com/jinzhu/gorm"
@@ -33,8 +32,7 @@ func getPostsGen(args GetPostsArgs, tx *gorm.DB, r *Resolvers) (GetPostsResponse
 	}
 
 	if args.Squery != nil {
-		fmt.Println(*args.Squery)
-		tx = tx.Order(gorm.Expr("SIMILARITY(CONCAT(title, tag1, tag2, tag3, tag4, tag5), ?) DESC", *args.Squery))
+		tx = tx.Debug().Where("SIMILARITY(CONCAT(title, tag1, tag2, tag3, tag4, tag5), ?) > 0", *args.Squery)
 	}
 
 	var postsResponse []*PostResponse
