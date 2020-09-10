@@ -18,6 +18,8 @@ import { ReactComponent as EditLogo } from "./../../assets/Edit.svg";
 import { ReactComponent as DeleteLogo } from "./../../assets/Delete.svg";
 import { ReactComponent as TickLogo } from "./../../assets/Tick Square.svg";
 import { ReactComponent as CloseLogo } from "./../../assets/Close Square.svg";
+import { sucessAlert, unknownError } from "../errorHandler";
+import { useDeletePostMutation } from "../../GraphQL/Mutations/createPostMutation";
 
 function Answer(props) {
   // fetch details
@@ -25,6 +27,11 @@ function Answer(props) {
   const { id, body, comments, vote, createdAt } = answerDetails;
   const username = answerDetails.user.username;
   const userId = answerDetails.user.id;
+
+  const [
+    deletePostMutation,
+    deletePostMutationResults,
+  ] = useDeletePostMutation();
 
   // check authorization
   const { authenticated, setauthenticated, user, setUser } = useContext(
@@ -43,6 +50,24 @@ function Answer(props) {
   const onAnswerUpdate = ({ body }) => {
     setAnsBody(body);
     setIsEditing(false);
+  };
+
+  // handle delete
+  const handleDelete = async () => {
+    try {
+      const response = await deletePostMutation(id);
+      if (response.data && response.data.deletePost) {
+        const ok = response.data.deletePost.ok;
+        if (ok === 300) {
+          props.history.push("/questions/page=1");
+          sucessAlert("Deleted Successfuly");
+        }
+      } else {
+        unknownError(`Delete Failed -${response.data.deletePost.error}`);
+      }
+    } catch {
+      unknownError("Delete Failed");
+    }
   };
 
   // initial data
@@ -64,7 +89,7 @@ function Answer(props) {
                 <Button onClick={handleToggle}>
                   <EditLogo />
                 </Button>
-                <Button>
+                <Button onClick={handleDelete}>
                   <DeleteLogo />
                 </Button>
               </ButtonGroup>
