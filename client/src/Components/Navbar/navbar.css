@@ -12,7 +12,7 @@
 }
 
 .navbar-item.special-btn {
-    background: linear-gradient(90deg, #FFBDCD 0%, #FF7171 100%);
+    background: linear-gradient(90deg, #FFBDCD 0%, #FF7171 60%);
 }
 
 .navbar-item .rs-nav-item-content {

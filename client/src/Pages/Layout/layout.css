@@ -103,3 +103,7 @@
 .trending-buttons::before {
     content: "-  ";
 }
+
+.full-height {
+    background-color: #f4f4f4;
+}
