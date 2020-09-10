@@ -72,5 +72,5 @@ type Vote struct {
 	PostID uint64 `gorm:"primary_key;auto_increment:false"`
 	User   User   `gorm:"foreignkey:UserID"`
 	UserID uint64 `gorm:"primary_key;auto_increment:false"`
-	State  bool  `gorm:"type:smallint;not null"`
+	State  bool
 }

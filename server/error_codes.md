@@ -25,3 +25,5 @@
 9. Unauthorized update : 308
 10. Post/Comment Delete Failure : 309
 11. Failure while Retrieve : 310
+12. Already voted : 311
+13. Vote Failure : 312

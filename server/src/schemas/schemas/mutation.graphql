@@ -13,6 +13,7 @@ type Mutation {
   createComment(pid: String!, body: String!): QueryResponse!
   updateComment(cid: String!, body: String!): QueryResponse!
   deleteComment(cid: String!): QueryResponse!
+  votePost(pid: String!, vote: Boolean!) : QueryResponse!
 }
 
 input Tags {

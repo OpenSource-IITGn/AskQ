@@ -32,7 +32,7 @@ func getPostsGen(args GetPostsArgs, tx *gorm.DB, r *Resolvers) (GetPostsResponse
 	}
 
 	if args.Squery != nil {
-		tx = tx.Debug().Where("SIMILARITY(CONCAT(title, tag1, tag2, tag3, tag4, tag5), ?) > 0", *args.Squery)
+		tx = tx.Where("SIMILARITY(CONCAT(title, tag1, tag2, tag3, tag4, tag5), ?) > 0", *args.Squery)
 	}
 
 	var postsResponse []*PostResponse

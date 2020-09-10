@@ -227,10 +227,71 @@ func (r *Resolvers) DeletePost(ctx context.Context, args struct{ Pid string }) (
 	}
 
 	if err := tx.Commit().Error; err != nil {
-		return &QueryResponse{Status: 308, Msg: &msg}, nil
+		return &QueryResponse{Status: 306, Msg: &msg}, nil
 	}
 
 	msg = fmt.Sprint(post.ID)
 
 	return &QueryResponse{Status: 300, Msg: &msg}, nil
+}
+
+
+// Vote to Post
+type votePostArgs struct {
+	Pid string
+	Vote bool
+}
+
+func (r *Resolvers) VotePost(ctx context.Context, args votePostArgs) (*QueryResponse, error) {
+	uid, err := handler.GetUid(ctx)
+
+	if err != nil {
+		msg := "Not Authorized. Please do not poke into others work."
+		return &QueryResponse{Status: 308, Msg: &msg}, nil
+	}
+
+	postresp, _ := r.GetPostDetailsByID(struct {Id string}{args.Pid})
+
+	if postresp.Status != 300 {
+		return &QueryResponse{Status: postresp.Status, Msg: postresp.Msg}, nil
+	}
+
+
+	vote := model.Vote{}
+	if err:= r.DB.Where("post_id = ?", args.Pid).Where("user_id = ?", uid).First(&vote).Error; err == nil {
+		msg := "You have already voted."
+		return &QueryResponse{Status: 311, Msg: &msg}, nil		
+	}
+
+	// Getting the post
+	post := *(postresp.Post.p)
+	vote.Post = post
+	vote.UserID = uid
+
+	if args.Vote == true {
+		post.Vote = post.Vote + 1
+		vote.State = true
+	} else {
+		post.Vote = post.Vote - 1
+		vote.State = false		
+	}
+
+	tx := r.DB.Begin()
+
+	msg := "Error while voting"
+	if err := tx.Save(&post).Error; err != nil {
+		tx.Rollback()
+		return &QueryResponse{Status: 312, Msg: &msg}, nil
+	}
+
+	if err := tx.Save(&vote).Error; err != nil {
+		tx.Rollback()
+		return &QueryResponse{Status: 312, Msg: &msg}, nil
+	}	
+
+	if err := tx.Commit().Error; err != nil {
+		return &QueryResponse{Status: 306, Msg: &msg}, nil
+	}
+
+	return &QueryResponse{Status: 300, Msg: nil}, nil
 }

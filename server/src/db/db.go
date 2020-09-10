@@ -12,7 +12,7 @@ type DB struct {
 
 // ConnectDB : connecting DB
 func ConnectDB() (*DB, error) {
-	db, err := gorm.Open("postgres", "host=localhost port=5432 user=go dbname=go password=go sslmode=disable")
+	db, err := gorm.Open("postgres", "host=localhost port=5432 user=test dbname=test password=test sslmode=disable")
 
 	if err != nil {
 		panic(err)
