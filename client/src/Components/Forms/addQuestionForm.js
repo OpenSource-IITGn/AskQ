@@ -100,7 +100,7 @@ function AddQuestionForm(props) {
   };
 
   return (
-    <Form onSubmit={handleSubmit} fluid>
+    <Form fluid>
       <FormGroup>
         <ControlLabel>Title</ControlLabel>
         <FormControl
@@ -133,7 +133,7 @@ function AddQuestionForm(props) {
       </FormGroup>
       <FormGroup>
         <ButtonToolbar>
-          <Button type="submit" appearance="primary">
+          <Button type="submit" appearance="primary" onClick={handleSubmit}>
             {isEditing ? "Update Question" : "Post Question"}
           </Button>
         </ButtonToolbar>
