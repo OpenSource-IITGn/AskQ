@@ -69,7 +69,7 @@ function CustomNavbar(props) {
             className="navbar-item"
             componentClass={Link}
             style={{ color: "#fff", height: "40px" }}
-            to="/"
+            to="/about"
           >
             About
           </Nav.Item>

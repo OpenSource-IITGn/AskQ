@@ -19,6 +19,7 @@ import { ReactComponent as UsersLogo } from "./../../assets/users.svg";
 import { ReactComponent as QuestionsLogo } from "./../../assets/questions.svg";
 import { ReactComponent as PlusLogo } from "./../../assets/Plus.svg";
 import "./layout.css";
+import { Link } from "react-router-dom";
 
 const headerStyles = {
   background: "#fff",
@@ -34,6 +35,9 @@ const iconStyles = {
 
 const Layout = (props) => {
   const [expand, setExpand] = useState(true);
+  const handleAskClick = () => {
+    props.history.push("/questions/create");
+  };
   return (
     <Container>
       <FlexboxGrid.Item colspan={5}>
@@ -43,7 +47,11 @@ const Layout = (props) => {
           collapsible
         >
           <Sidenav.Header>
-            <div className="side-header" style={headerStyles}>
+            <div
+              className="side-header"
+              style={headerStyles}
+              onClick={() => props.history.push("/")}
+            >
               <Logo />
             </div>
           </Sidenav.Header>
@@ -55,7 +63,7 @@ const Layout = (props) => {
           >
             <Sidenav.Body>
               <div className="main-button">
-                <Button>
+                <Button onClick={handleAskClick}>
                   <PlusLogo />
                   <span>Ask Question</span>
                 </Button>
@@ -65,6 +73,8 @@ const Layout = (props) => {
                   className="side-nav-item"
                   eventKey="1"
                   active
+                  componentClass={Link}
+                  to="/questions"
                   icon={<QuestionsLogo />}
                 >
                   <span>Questions</span>
@@ -72,6 +82,8 @@ const Layout = (props) => {
                 <Nav.Item
                   className="side-nav-item"
                   eventKey="2"
+                  componentClass={Link}
+                  to="/dashboard"
                   icon={<DashboardLogo />}
                 >
                   <span>Dashboard</span>
@@ -79,13 +91,17 @@ const Layout = (props) => {
                 <Nav.Item
                   className="side-nav-item"
                   eventKey="3"
+                  componentClass={Link}
+                  to="/bookmarks"
                   icon={<UsersLogo />}
                 >
-                  <span>Users</span>
+                  <span>Bookmarks</span>
                 </Nav.Item>
                 <Nav.Item
                   className="side-nav-item"
                   eventKey="4"
+                  componentClass={Link}
+                  to="/courses"
                   icon={<CoursesLogo />}
                 >
                   <span>Courses</span>
