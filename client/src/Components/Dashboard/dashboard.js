@@ -1,11 +1,17 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "../../Contexts/UserContext";
 import { Nav, Icon } from "rsuite";
+import QuestionList from "../Questions/questionList";
 
 const Dashboard = (props) => {
   console.log(props);
   const { authenticated, user } = useContext(UserContext);
   const [active, setActive] = useState("questions");
+
+  const page_number = parseInt(props.match.params.page, 10);
+  const handleSelect = (activeKey) => {
+    setActive(activeKey);
+  };
 
   if (!authenticated) {
     return <div> You are not authenticated.</div>;
@@ -14,13 +20,19 @@ const Dashboard = (props) => {
 
   const onSelect = () => {};
 
-  const handleSelect = (activeKey) => {
-    setActive(activeKey);
-  };
-
-  const questionBlock = <div>Questions</div>;
+  const questionBlock = (
+    <div>
+      <QuestionList {...props} myQuestions={true} page_number={page_number} />
+    </div>
+  );
 
   const answersBlock = <div className="">Answers</div>;
+
+  // const allQuestions = posts
+  //   ? posts.map((question) => (
+  //       <Question showDetailed={false} {...question} {...props} />
+  //     ))
+  //   : "No Questions Found";
 
   return (
     <div>

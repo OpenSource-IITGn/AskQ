@@ -56,6 +56,7 @@ function Questions(props) {
             <SearchBar handleSearch={handleSearch} />
             <QuestionList
               {...props}
+              myQuestions={false}
               page_number={page_number}
               squery={squery}
             />

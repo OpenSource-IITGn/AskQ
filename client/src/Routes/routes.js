@@ -14,6 +14,7 @@ import ProfileDashboard from "../Pages/profileDashboard";
 import Bookmarks from "../Pages/bookmarks";
 import Courses from "../Pages/courses";
 import AboutPage from "../Pages/about";
+import Dashboard from "../Components/Dashboard/dashboard";
 
 export default class Routes extends Component {
   render() {
@@ -70,6 +71,16 @@ export default class Routes extends Component {
             exact
             path="/questions/page=:page"
             render={(routeProps) => <Questions {...routeProps} />}
+          />
+          <Route
+            exact
+            path="/dashboard/q/page=:page"
+            render={(routeProps) => <ProfileDashboard {...routeProps} />}
+          />
+          <Route
+            exact
+            path="/dashboard/a/page=:page"
+            render={(routeProps) => <ProfileDashboard {...routeProps} />}
           />
           <Route
             exact
