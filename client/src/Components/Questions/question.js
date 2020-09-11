@@ -60,7 +60,7 @@ function Question(props) {
       if (response.data && response.data.deletePost) {
         const ok = response.data.deletePost.ok;
         if (ok === 300) {
-          props.history.push("/questions/page=1");
+          props.history.push("/questions");
           sucessAlert("Deleted Successfuly");
         }
       } else {
